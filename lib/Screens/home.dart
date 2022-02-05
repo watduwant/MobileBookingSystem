@@ -1,9 +1,10 @@
 import 'dart:convert';
 import 'package:booking_system/data/dataFetcher.dart';
-import 'package:booking_system/views/loadingPage.dart';
+import 'package:booking_system/Screens/loadingPage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:sizer/sizer.dart';
 
 class Home extends StatefulWidget {
   
@@ -12,7 +13,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  final TextEditingController userNameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   bool loading = false;
 
@@ -25,13 +26,12 @@ class _HomeState extends State<Home> {
           //mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text('Whatduwant',
-            style: TextStyle(fontFamily: 'Amaranth',fontWeight: FontWeight.w700, fontSize: 23, color: Colors.black),),
+            style: TextStyle(fontFamily: 'Amaranth',fontWeight: FontWeight.w700, fontSize: 23.0.sp, color: Colors.black),),
             //Text('System',
             //style: GoogleFonts.oswald(textStyle: TextStyle(fontWeight: FontWeight.w500, fontSize: 21)))
           ],
         ),
-        leading: Padding(
-          padding: EdgeInsets.all(0),
+        leading: Container(
           child: ClipOval(
             child: Image.asset('assets/Images/logo_oct1.png'),
           ),
@@ -58,45 +58,37 @@ class _HomeState extends State<Home> {
           ),
           Container(
             width: MediaQuery.of(context).size.width,
-            margin: EdgeInsets.only(top:280),
+            margin: EdgeInsets.only(top: 35.h),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               color: Colors.white
             ),
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 23),
+              padding: EdgeInsets.symmetric(horizontal: 23.0.sp),
               child: ListView(
                 children: <Widget>[
                   Container(
-                    margin: EdgeInsets.only(top: 35),
+                    margin: EdgeInsets.only(top: 35.0.sp),
                     alignment: Alignment.center,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Text('Login',
-                        style: TextStyle(fontFamily: 'Amaranth', fontWeight: FontWeight.w600, fontSize: 30, color: Colors.black),),
-                        //Text('in',
-                        //style: GoogleFonts.prompt(textStyle: TextStyle(fontWeight: FontWeight.w600, fontSize: 30, color: Colors.black)))
-                      ],
-                    ),
+                    child: Text('Login',
+                    style: TextStyle(fontFamily: 'Amaranth', fontWeight: FontWeight.w600, fontSize: 28.0.sp, color: Colors.black),),
                   ),
                   Padding(
-                    padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
+                    padding: EdgeInsets.fromLTRB(0, 20.0.sp, 0, 20.0.sp),
                     child: Container(
                       color: Color(0xfff5f5f5),
                       child: TextFormField(
                         keyboardType: TextInputType.text,
-                        controller: userNameController,
+                        controller: emailController,
                         style: TextStyle(
                           color: Colors.black, fontFamily: 'SFUIDisplay'),
                         decoration: InputDecoration(
                         border: OutlineInputBorder(),
                         focusColor: Colors.black,
                         hoverColor: Colors.black,
-
-                        labelText: 'Username',
+                        labelText: 'Email',
                         prefixIcon: Icon(Icons.person_outline),
-                        labelStyle: TextStyle(fontSize: 15)),
+                        labelStyle: TextStyle(fontSize: 14.0.sp)),
                       ),
                     ),
                   ),
@@ -111,24 +103,24 @@ class _HomeState extends State<Home> {
                       border: OutlineInputBorder(),
                       labelText: 'Password',
                       prefixIcon: Icon(Icons.lock_outline),
-                      labelStyle: TextStyle(fontSize: 15)),
+                      labelStyle: TextStyle(fontSize: 14.0.sp)),
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.only(top: 20),
+                    padding: EdgeInsets.only(top: 20.0.sp),
                     child: MaterialButton(
                       onPressed: (){
                         setState(() {
                           loading = true;
                         });
-                        login(userNameController.text, passwordController.text);
+                        login(emailController.text, passwordController.text);
                       },
                       child: loadingOrNot(),
                       color: Colors.black,
                       elevation: 0,
                       textColor: Colors.white,
-                      minWidth: 400,
-                      height: 50,
+                      minWidth: 100.w,
+                      height: 40.0.sp,
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                     ),
                   ),
@@ -149,14 +141,14 @@ class _HomeState extends State<Home> {
       return Text('Login',
         style: TextStyle(
             fontFamily: 'Roboto',
-            fontSize: 20,
+            fontSize: 20.0.sp,
             fontWeight: FontWeight.w500
         ),
       );
     }
   }
 
-  Future<void> login(String userName, String password) async{
+  Future<void> login(String email, String password) async{
     final url = Uri.parse('https://watduwantapi.pythonanywhere.com/api/auth');
     var response = await http.post(
         url,
@@ -164,16 +156,17 @@ class _HomeState extends State<Home> {
           'Accept' : 'application/json'
         },
     body: {
-          'username' : userName,
+          'email' : email,
       'password' : password
     });
+    print(response.body);
 
     setState(() {
       loading = false;
     });
     if(jsonDecode(response.body)['token'] != null){
-      AllData.username = userName;
-      Navigator.push(context, MaterialPageRoute(builder: (context)=>LoadingPage(userName: "${userNameController.text}", firstTime : true)));
+      AllData.email = email;
+      Navigator.push(context, MaterialPageRoute(builder: (context) => LoadingPage(userName: "${emailController.text}", firstTime : true)));
     }
     else{
       final snackBar = SnackBar(content: Text('Invalid Login Credentials'));

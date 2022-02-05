@@ -1,13 +1,17 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:booking_system/Models/appointmentsModel.dart';
+import 'package:booking_system/Services/GetAppointments.dart';
+import 'package:booking_system/data/UpdateAppointments.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:booking_system/data/dataFetcher.dart';
-import 'package:booking_system/views/theDrawer.dart';
+import 'package:booking_system/Screens/theDrawer.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
+import 'package:sizer/sizer.dart';
 import 'add_patient.dart';
 import 'loadingPage.dart';
 import 'package:clipboard/clipboard.dart';
@@ -29,15 +33,23 @@ class _DetailHomeState extends State<DetailHome> {
   TextEditingController doctorNameController = TextEditingController();
   String day = DateFormat('EEEE').format(DateTime.now()).toString().substring(0, 3);
   //String day = 'Sun';
-  String link = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ';
 
   late Timer _timer;
 
   @override
   void initState() {
-    updateAppointments();
+    updateAppointments().then((value){
+      setState(() {
+        print('Appointments Updated');
+      });
+    });
     _timer = new Timer.periodic(Duration(seconds: 45),
-            (_) => updateAppointments());
+            (_) => updateAppointments().then((value) {
+              setState(() {
+                print('Appointments Updated');
+              });
+            })
+    );
     super.initState();
   }
 
@@ -60,7 +72,7 @@ class _DetailHomeState extends State<DetailHome> {
             child: Text(
               'Hello ${widget.userName.toUpperCase()} !',
               textAlign: TextAlign.end,
-              style: TextStyle( fontFamily: 'Amaranth', fontSize: 15, color: Colors.black),
+              style: TextStyle( fontFamily: 'Amaranth', fontSize: 12.0.sp, color: Colors.black),
             ),
           ),
           SizedBox(width: 10.0,)
@@ -91,16 +103,15 @@ class _DetailHomeState extends State<DetailHome> {
               visible: !visibleHome,
               child: Center(
                   child: Padding(
-                padding:
-                    EdgeInsets.only(top: MediaQuery.of(context).size.height / 3),
-                child: CircularProgressIndicator(),
+                    padding: EdgeInsets.only(top: MediaQuery.of(context).size.height / 3),
+                    child: CircularProgressIndicator(),
               )),
             ),
             Visibility(
               visible: !visibleHome,
               child: Center(
                   child: Padding(
-                      padding: EdgeInsets.only(top: 20.0),
+                      padding: EdgeInsets.only(top: 10.0.sp),
                       child: Text('Fetching Data'))),
             ),
             Visibility(
@@ -127,14 +138,14 @@ class _DetailHomeState extends State<DetailHome> {
                           AllData.clinicName,
                           style: TextStyle(
                                   fontFamily: 'Amaranth',
-                                  fontSize: 24,
+                                  fontSize: 24.0.sp,
                                   fontWeight: FontWeight.w700,
                                   color: Colors.white),
                         ),
                       ),
                     ),
                     SizedBox(
-                      height: 10.0,
+                      height: 10.0.sp,
                     ),
                     Container(
                         child: Row(
@@ -142,17 +153,17 @@ class _DetailHomeState extends State<DetailHome> {
                             Expanded(child: businessOnOrNot()),
                             Expanded(
                                 child: Container(
-                                  padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                                  padding: EdgeInsets.only(left: 15.0.sp, right: 15.0.sp),
                                   decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.all(Radius.circular(10.0))
+                                    borderRadius: BorderRadius.all(Radius.circular(10.0.sp))
                                   ),
                                   child: MaterialButton(
                                     shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20.0),
+                                      borderRadius: BorderRadius.circular(20.0.sp),
                                     ),
                                     child: Text('Share Business' , style: TextStyle(
                                         fontFamily: 'Amaranth',
-                                        fontSize: 16,
+                                        fontSize: 14.0.sp,
                                         color: Colors.white),),
                                     onPressed: () => shareBusiness(),
                                     color: Colors.black,
@@ -166,7 +177,7 @@ class _DetailHomeState extends State<DetailHome> {
               ),
             ),
             SizedBox(
-              height: 15,
+              height: 15.0.sp,
             ),
             Visibility(
               visible: visibleHome,
@@ -178,7 +189,7 @@ class _DetailHomeState extends State<DetailHome> {
                 visible: visibleHome,
                 child: Padding(
                   padding: EdgeInsets.only(
-                      top: 10.0, left: 20.0, right: 20.0, bottom: 10.0),
+                      top: 10.0.sp, left: 20.0.sp, right: 20.0.sp, bottom: 10.0.sp),
                   child: Row(
                     children: [
                       Expanded(
@@ -187,7 +198,7 @@ class _DetailHomeState extends State<DetailHome> {
                           textAlign: TextAlign.end,
                           style: TextStyle(
                                   fontFamily: 'Amaranth',
-                                  fontWeight: FontWeight.w600, fontSize: 20),
+                                  fontWeight: FontWeight.w600, fontSize: 16.0.sp),
                         ),
                       ),
                       SizedBox( width:  10.0,),
@@ -196,7 +207,7 @@ class _DetailHomeState extends State<DetailHome> {
                           widget.userName,
                           style: TextStyle(
                                   fontFamily: 'Roboto',
-                                  fontSize: 18),
+                                  fontSize: 14.0.sp),
                         ),
                       ),
                     ],
@@ -212,7 +223,7 @@ class _DetailHomeState extends State<DetailHome> {
                 visible: visibleHome,
                 child: Padding(
                   padding: EdgeInsets.only(
-                      top: 10.0, left: 20.0, right: 20.0, bottom: 10.0),
+                      top: 10.0.sp, left: 20.0.sp, right: 20.0.sp, bottom: 10.0.sp),
                   child: Row(
                     children: [
                       Expanded(
@@ -221,16 +232,16 @@ class _DetailHomeState extends State<DetailHome> {
                           textAlign: TextAlign.end,
                           style: TextStyle(
                                   fontFamily: 'Amaranth',
-                                  fontWeight: FontWeight.w600, fontSize: 20),
+                                  fontWeight: FontWeight.w600, fontSize: 16.sp),
                         ),
                       ),
-                      SizedBox( width:  10.0,),
+                      SizedBox( width:  10.0.sp,),
                       Expanded(
                         child: Text(
                           AllData.clinicName,
                           style:  TextStyle(
                                   fontFamily: 'Roboto',
-                                  fontSize: 18),
+                                  fontSize: 14.0.sp),
                         ),
                       ),
                     ],
@@ -246,7 +257,7 @@ class _DetailHomeState extends State<DetailHome> {
                 visible: visibleHome,
                 child: Padding(
                   padding: EdgeInsets.only(
-                      top: 10.0, left: 20.0, right: 20.0, bottom: 10.0),
+                      top: 10.0.sp, left: 20.0.sp, right: 20.0.sp, bottom: 10.0.sp),
                   child: Row(
                     children: [
                       Expanded(
@@ -255,16 +266,16 @@ class _DetailHomeState extends State<DetailHome> {
                           textAlign: TextAlign.end,
                           style: TextStyle(
                                   fontFamily: 'Amaranth',
-                                  fontWeight: FontWeight.w600, fontSize: 20),
+                                  fontWeight: FontWeight.w600, fontSize: 16.sp),
                         ),
                       ),
-                      SizedBox( width:  10.0,),
+                      SizedBox( width:  10.0.sp,),
                       Expanded(
                         child: Text(
                           AllData.email,
                           style:  TextStyle(
                                   fontFamily: 'Roboto',
-                                  fontSize: 18),
+                                  fontSize: 14.sp),
                         ),
                       ),
                     ],
@@ -280,7 +291,7 @@ class _DetailHomeState extends State<DetailHome> {
                 visible: visibleHome,
                 child: Padding(
                   padding: EdgeInsets.only(
-                      top: 10.0, left: 20.0, right: 20.0, bottom: 10.0),
+                      top: 10.0.sp, left: 20.0.sp, right: 20.0.sp, bottom: 10.0.sp),
                   child: Row(
                     children: [
                       Expanded(
@@ -289,16 +300,16 @@ class _DetailHomeState extends State<DetailHome> {
                           textAlign: TextAlign.end,
                           style: TextStyle(
                                   fontFamily: 'Amaranth',
-                                  fontWeight: FontWeight.w600, fontSize: 20),
+                                  fontWeight: FontWeight.w600, fontSize: 16.sp),
                         ),
                       ),
-                      SizedBox( width:  10.0,),
+                      SizedBox( width:  10.0.sp,),
                       Expanded(
                         child: Text(
                           AllData.phone,
                           style: TextStyle(
                               fontFamily: 'Roboto',
-                                  fontSize: 18),
+                                  fontSize: 14.0.sp),
                         ),
                       ),
                     ],
@@ -314,7 +325,7 @@ class _DetailHomeState extends State<DetailHome> {
                 visible: visibleHome,
                 child: Padding(
                   padding: EdgeInsets.only(
-                      top: 10.0, left: 20.0, right: 20.0, bottom: 10.0),
+                      top: 10.0.sp, left: 20.0.sp, right: 20.0.sp, bottom: 10.0.sp),
                   child: Row(
                     children: [
                       Expanded(
@@ -323,16 +334,16 @@ class _DetailHomeState extends State<DetailHome> {
                           textAlign: TextAlign.end,
                           style: TextStyle(
                                   fontFamily: 'Amaranth',
-                                  fontWeight: FontWeight.w600, fontSize: 20),
+                                  fontWeight: FontWeight.w600, fontSize: 16.0.sp),
                         ),
                       ),
-                      SizedBox( width:  10.0,),
+                      SizedBox( width:  10.0.sp,),
                       Expanded(
                         child: Text(
                           AllData.address,
                           style: TextStyle(
                               fontFamily: 'Roboto',
-                                  fontSize: 18),
+                                  fontSize: 14.0.sp),
                         ),
                       ),
                     ],
@@ -348,7 +359,7 @@ class _DetailHomeState extends State<DetailHome> {
                 visible: visibleHome,
                 child: Padding(
                   padding: EdgeInsets.only(
-                      top: 10.0, left: 20.0, right: 20.0, bottom: 10.0),
+                      top: 10.0.sp, left: 20.0.sp, right: 20.0.sp, bottom: 10.0.sp),
                   child: Row(
                     children: [
                       Expanded(
@@ -357,10 +368,10 @@ class _DetailHomeState extends State<DetailHome> {
                           textAlign: TextAlign.end,
                           style: TextStyle(
                               fontFamily: 'Amaranth',
-                                  fontWeight: FontWeight.w600, fontSize: 20),
+                                  fontWeight: FontWeight.w600, fontSize: 16.0.sp),
                         ),
                       ),
-                      SizedBox( width:  10.0,),
+                      SizedBox( width:  10.0.sp,),
                       Expanded(
                           child: Row(
                         children: [
@@ -369,7 +380,7 @@ class _DetailHomeState extends State<DetailHome> {
                               AllData.openingHours,
                               style: TextStyle(
                                   fontFamily: 'Roboto',
-                                      fontSize: 18),
+                                      fontSize: 14.0.sp),
                             ),
                           ),
                           IconButton(
@@ -396,7 +407,7 @@ class _DetailHomeState extends State<DetailHome> {
                 visible: visibleHome,
                 child: Padding(
                   padding: EdgeInsets.only(
-                      top: 10.0, left: 20.0, right: 20.0, bottom: 10.0),
+                      top: 10.0.sp, left: 20.0.sp, right: 20.0.sp, bottom: 10.0.sp),
                   child: Row(
                     children: [
                       Expanded(
@@ -405,38 +416,38 @@ class _DetailHomeState extends State<DetailHome> {
                           textAlign: TextAlign.end,
                           style: TextStyle(
                               fontFamily: 'Amaranth',
-                                  fontWeight: FontWeight.w600, fontSize: 20),
+                                  fontWeight: FontWeight.w600, fontSize: 16.0.sp),
                         ),
                       ),
-                      SizedBox( width:  10.0,),
+                      SizedBox( width:  10.0.sp,),
                       Expanded(
                         child: Text(
                           AllData.closingDay,
                           style: TextStyle(
                               fontFamily: 'Roboto',
-                                  fontSize: 18),
+                                  fontSize: 14.0.sp),
                         ),
                       ),
                     ],
                   ),
                 )
                 ),
-            SizedBox(height: 10),
+            SizedBox(height: 10.0.sp),
             Visibility(
               visible: visibleHome,
               child: Center(
                 child: Column(
                   children: <Widget>[
                     Container(
-                      width: MediaQuery.of(context).size.width,
+                      width: 100.w,
                       color: Colors.black,
-                      padding: EdgeInsets.symmetric(vertical: 2, horizontal: 5),
+                      padding: EdgeInsets.symmetric(vertical: 2.0.sp, horizontal: 5.0.sp),
                       child: Center(
                         child: Text(
                           'Doctors Today',
                           style: TextStyle(
                               fontFamily: 'Amaranth',
-                                  fontSize: 22,
+                                  fontSize: 20.0.sp,
                                   fontWeight: FontWeight.w700,
                                   color: Colors.white),
                         ),
@@ -447,13 +458,13 @@ class _DetailHomeState extends State<DetailHome> {
               ),
             ),
             SizedBox(
-              height: 5,
+              height: 5.0.sp,
             ),
             Visibility(
               visible: visibleHome,
               child: Container(
-                width: MediaQuery.of(context).size.width / 3,
-                height: MediaQuery.of(context).size.width / 2,
+                width: 33.w,
+                height: 50.w,
                 child: ListView(
                     scrollDirection: Axis.horizontal,
                       children: List<Widget>.generate(AllData.doctorsInfo.length,
@@ -488,14 +499,14 @@ class _DetailHomeState extends State<DetailHome> {
                                                           )
                                                       ),
                                                     ),),
-                                                    SizedBox(height: 10.0,),
+                                                    SizedBox(height: 10.0.sp,),
                                                     Expanded(
                                                       flex: 1,
                                                       child: Text(
                                                         AllData.doctorsInfo[index]['Doctor'],
                                                         style: TextStyle(
                                                             fontFamily: 'Roboto',
-                                                            fontSize: 16),
+                                                            fontSize: 12.0.sp),
                                                       ),),
                                                     Expanded(
                                                       flex:1,
@@ -503,7 +514,7 @@ class _DetailHomeState extends State<DetailHome> {
                                                         DateFormat.jm().format(DateTime.parse('2021-01-01 ${AllData.doctorsInfo[index]['Time'][timing]}')),
                                                       style: TextStyle(
                                                           fontFamily: 'Roboto',
-                                                              fontSize: 16),
+                                                              fontSize: 12.0.sp),
                                                     ),),
                                                     Expanded(
                                                       flex: 2,
@@ -511,7 +522,7 @@ class _DetailHomeState extends State<DetailHome> {
                                                       ' ${AllData.doctorsInfo[index]['Appointments'][timing].length} / ${AllData.doctorsInfo[index]['Slots'][timing]}',
                                                       style: TextStyle(
                                                           fontFamily: 'Roboto',
-                                                              fontSize: 16),
+                                                              fontSize: 12.0.sp),
                                                     ),)
                                                   ],
                                                 )
@@ -527,7 +538,7 @@ class _DetailHomeState extends State<DetailHome> {
                     ),
               )
             ),
-            SizedBox(height: 75.0)
+            SizedBox(height: 5.h)
           ],
         ),
       ),
@@ -559,18 +570,18 @@ class _DetailHomeState extends State<DetailHome> {
           Text(
             'Business On',
             style:TextStyle(
-                    fontSize: 16,
+                    fontSize: 14.0.sp,
                     fontFamily: 'Roboto',
                     fontWeight: FontWeight.bold,
                     color: Colors.green),
           ),
           SizedBox(
-            width: 3,
+            width: 3.0.sp,
           ),
           Icon(
             Icons.check_circle_rounded,
             color: Colors.green,
-            size: 16,
+            size: 16.0.sp,
           )
         ],
       );
@@ -581,18 +592,18 @@ class _DetailHomeState extends State<DetailHome> {
           Text(
             'Business Off',
             style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 14.0.sp,
                     fontFamily: 'Roboto',
                     fontWeight: FontWeight.bold,
                     color: Colors.red),
           ),
           SizedBox(
-            width: 3,
+            width: 3.0.sp,
           ),
           Icon(
             Icons.check_circle_rounded,
             color: Colors.red,
-            size: 16,
+            size: 16.0.sp,
           )
         ],
       );
@@ -611,7 +622,7 @@ class _DetailHomeState extends State<DetailHome> {
                   children: [
                     Expanded(
                       flex: 8,
-                        child: Text(link)
+                        child: Text(AllData.link)
                     ),
                     Expanded(
                       flex: 2,
@@ -619,7 +630,7 @@ class _DetailHomeState extends State<DetailHome> {
                           icon: Icon(Icons.copy),
                           onPressed: () {
                             //FlutterClipboard.copy(link).then((value) => print('copied'));
-                            Clipboard.setData(ClipboardData(text: link));
+                            Clipboard.setData(ClipboardData(text: AllData.link));
                           },
                     ))
                   ],
@@ -630,42 +641,6 @@ class _DetailHomeState extends State<DetailHome> {
           );
     }
     );
-  }
-
-  updateAppointments() async{
-    print('Updating Appointments');
-    var appointmentDetails = await http.get(
-        Uri.parse('https://watduwantapi.pythonanywhere.com/api/appointments'),
-        headers: {'Accept': 'application/json'});
-
-    print('Data Fetch over');
-
-    for (var detail in AllData.doctorsInfo) {
-      var x = List.generate(detail['Time'].length, (_) => []);
-      for (var appointment in jsonDecode(appointmentDetails.body)) {
-        for (var i = 0; i < detail['ServiceID'].length; i++) {
-          if (appointment['Service'] == detail['ServiceID'][i]) {
-            Map<String, dynamic> temp = {};
-            temp['id'] = appointment['id'];
-            temp['Customer ID'] = appointment['Customer'];
-            temp['Service ID'] = appointment['Service'];
-            temp['Patient'] = appointment['PatientName'];
-            temp['Age'] = appointment['Age'];
-            temp['Sex'] = appointment['Sex'];
-            temp['Rank'] = appointment['Rank'];
-            temp['Status'] = appointment['Status'];
-            temp['Date'] = appointment['date'];
-            temp['Contact'] = appointment['phone'];
-            x[i].add(temp);
-          }
-        }
-      }
-      detail['Appointments'] = x;
-    }
-
-    setState(() {
-      print('Appointments Updated');
-    });
   }
 
   String convertLetterTo3Letters(String d) {

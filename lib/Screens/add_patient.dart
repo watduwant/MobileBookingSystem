@@ -1,9 +1,11 @@
 import 'dart:convert';
+import 'package:booking_system/Services/SetAppointment.dart';
 import 'package:booking_system/data/dataFetcher.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
+import 'package:sizer/sizer.dart';
 
 class AddPatient extends StatefulWidget {
   final String userName;
@@ -52,7 +54,7 @@ class _AddPatientState extends State<AddPatient> {
             child: Text(
               'Hello ${widget.userName.toUpperCase()} !',
               textAlign: TextAlign.end,
-              style: TextStyle( fontFamily: 'Amaranth', fontSize: 15, color: Colors.black),
+              style: TextStyle( fontFamily: 'Amaranth', fontSize: 12.0.sp, color: Colors.black),
             ),
           ),
           SizedBox(width: 10.0,)
@@ -77,20 +79,20 @@ class _AddPatientState extends State<AddPatient> {
           Container(
             width: MediaQuery.of(context).size.width,
             color: Colors.black,
-            padding: EdgeInsets.symmetric(vertical: 2, horizontal: 5),
+            padding: EdgeInsets.symmetric(vertical: 2.0.sp, horizontal: 5.0.sp),
             child: Center(
               child: Text(
                 'Add Patient',
                 style: TextStyle(
                     fontFamily: 'Amaranth',
-                        fontSize: 22,
+                        fontSize: 16.0.sp,
                         fontWeight: FontWeight.w700,
                         color: Colors.white),
               ),
             ),
           ),
           Padding(
-            padding: EdgeInsets.only(top: 30.0, left: 15.0, right: 15.0),
+            padding: EdgeInsets.only(top: 30.0.sp, left: 15.0.sp, right: 15.0.sp),
             child: TextField(
               controller: dateController,
               readOnly: true,
@@ -131,86 +133,86 @@ class _AddPatientState extends State<AddPatient> {
                   findDoctorNamesAndSlots();
                 });
               },
-              style: TextStyle(fontFamily: 'Roboto', fontSize: 17),
+              style: TextStyle(fontFamily: 'Roboto', fontSize: 14.0.sp),
               decoration: InputDecoration(
                   hintText: 'Date',
-                  hintStyle: TextStyle(fontFamily: 'Roboto', fontSize: 15),
+                  hintStyle: TextStyle(fontFamily: 'Roboto', fontSize: 13.0.sp),
                   border: OutlineInputBorder(),
                   contentPadding:
-                      EdgeInsets.symmetric(vertical: 0, horizontal: 10)),
+                      EdgeInsets.symmetric(vertical: 0, horizontal: 10.0.sp)),
             ),
           ),
           Padding(
-            padding: EdgeInsets.only(top: 10, left: 15.0, right: 15.0),
+            padding: EdgeInsets.only(top: 10.0.sp, left: 15.0.sp, right: 15.0.sp),
             child: TextFormField(
               controller: nameController,
-              style: TextStyle(fontFamily: 'Roboto', fontSize: 17),
+              style: TextStyle(fontFamily: 'Roboto', fontSize: 14.0.sp),
               decoration: InputDecoration(
                   hintText: 'Patient Name',
-                  hintStyle: TextStyle(fontFamily: 'Roboto', fontSize: 15),
+                  hintStyle: TextStyle(fontFamily: 'Roboto', fontSize: 13.0.sp),
                   border: OutlineInputBorder(),
                   contentPadding:
-                      EdgeInsets.symmetric(vertical: 0, horizontal: 10)),
+                      EdgeInsets.symmetric(vertical: 0, horizontal: 10.0.sp)),
             ),
           ),
           Padding(
-            padding: EdgeInsets.only(top: 10.0, left: 15.0, right: 15.0),
+            padding: EdgeInsets.only(top: 10.0.sp, left: 15.0.sp, right: 15.0.sp),
             child: TextFormField(
               controller: ageController,
               keyboardType: TextInputType.number,
-              style: TextStyle(fontFamily: 'Roboto', fontSize: 17),
+              style: TextStyle(fontFamily: 'Roboto', fontSize: 14.0.sp),
               decoration: InputDecoration(
                   hintText: 'Age',
-                  hintStyle: TextStyle(fontFamily: 'Roboto', fontSize: 15),
+                  hintStyle: TextStyle(fontFamily: 'Roboto', fontSize: 13.0.sp),
                   border: OutlineInputBorder(),
                   contentPadding:
-                      EdgeInsets.symmetric(vertical: 0, horizontal: 10)),
+                      EdgeInsets.symmetric(vertical: 0, horizontal: 10.0.sp)),
             ),
           ),
           Padding(
-            padding: EdgeInsets.only(top: 10.0, left: 15.0, right: 15.0),
+            padding: EdgeInsets.only(top: 10.0.sp, left: 15.0.sp, right: 15.0.sp),
             child: TextFormField(
               controller: phoneController,
               keyboardType: TextInputType.number,
-              style: TextStyle(fontFamily: 'Roboto', fontSize: 17),
+              style: TextStyle(fontFamily: 'Roboto', fontSize: 14.0.sp),
               decoration: InputDecoration(
                   hintText: 'Contact Number',
-                  hintStyle: TextStyle(fontFamily: 'Roboto', fontSize: 15),
+                  hintStyle: TextStyle(fontFamily: 'Roboto', fontSize: 13.0.sp),
                   border: OutlineInputBorder(),
                   contentPadding:
-                      EdgeInsets.symmetric(vertical: 0, horizontal: 10)),
+                      EdgeInsets.symmetric(vertical: 0, horizontal: 10.0.sp)),
             ),
           ),
           Padding(
-            padding: EdgeInsets.only(top: 10.0, left: 15.0, right: 15.0),
+            padding: EdgeInsets.only(top: 10.0.sp, left: 15.0.sp, right: 15.0.sp),
             child: DropdownButtonFormField(
                 onChanged: (val) => _selectedSex = val.toString(),
                 value: _selectedSex,
                 decoration: InputDecoration(
                     border: OutlineInputBorder(),
                     contentPadding:
-                        EdgeInsets.symmetric(vertical: 0, horizontal: 10)),
+                        EdgeInsets.symmetric(vertical: 0, horizontal: 10.0.sp)),
                 items: ['Choose Gender', 'Male', 'Female']
                     .map<DropdownMenuItem<String>>((String val) {
                   return DropdownMenuItem<String>(value: val, child: Text(val, style: TextStyle(fontFamily: 'Roboto', fontSize: 17),));
                 }).toList()),
           ),
           Padding(
-            padding: EdgeInsets.only(top: 10.0, left: 15.0, right: 15.0),
+            padding: EdgeInsets.only(top: 10.0.sp, left: 15.0.sp, right: 15.0.sp),
             child: DropdownButtonFormField(
                 onChanged: (val) => onSelectedDoctor(val.toString()),
                 value: _selectedDoctor,
                 decoration: InputDecoration(
                     border: OutlineInputBorder(),
                     contentPadding:
-                        EdgeInsets.symmetric(vertical: 0, horizontal: 10)),
+                        EdgeInsets.symmetric(vertical: 0, horizontal: 10.sp)),
                 items: AllData.doctorDetails.keys
                     .map<DropdownMenuItem<String>>((String val) {
                   return DropdownMenuItem<String>(value: val, child: Text(val,style: TextStyle(fontFamily: 'Roboto', fontSize: 17),));
                 }).toList()),
           ),
           Padding(
-            padding: EdgeInsets.only(top: 10.0, left: 15.0, right: 15.0),
+            padding: EdgeInsets.only(top: 10.0.sp, left: 15.0.sp, right: 15.0.sp),
             child: DropdownButtonFormField(
                 onChanged: (value) {
                   _selectedSlot = value.toString();
@@ -222,21 +224,21 @@ class _AddPatientState extends State<AddPatient> {
                 decoration: InputDecoration(
                     border: OutlineInputBorder(),
                     contentPadding:
-                        EdgeInsets.symmetric(vertical: 0, horizontal: 10)),
+                        EdgeInsets.symmetric(vertical: 0, horizontal: 10.0.sp)),
                 items: _slot.map<DropdownMenuItem<String>>((String val) {
                   return DropdownMenuItem<String>(value: val, child: Text(val, style: TextStyle(fontFamily: 'Roboto', fontSize: 17),));
                 }).toList()),
           ),
           Padding(
-            padding: EdgeInsets.only(top: 30.0, left: 15.0, right: 15.0),
+            padding: EdgeInsets.only(top: 30.0.sp, left: 15.0.sp, right: 15.0.sp),
             child: Container(
-              height: 40,
-              width: 100,
+              height: 40.0.sp,
+              width: 100.0.sp,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(6),
+                borderRadius: BorderRadius.circular(6.0.sp),
                 color: Colors.black,
               ),
-              padding: EdgeInsets.all(5),
+              padding: EdgeInsets.all(5.0.sp),
               child: MaterialButton(
                 onPressed: () {
                   if (postTime) {
@@ -267,7 +269,7 @@ class _AddPatientState extends State<AddPatient> {
       return Text(
         "Submit",
         style: TextStyle(
-                fontSize: 20,
+                fontSize: 16.0.sp,
             fontFamily: 'Roboto',
                 fontWeight: FontWeight.w700,
                 color: Colors.white),
@@ -292,7 +294,7 @@ class _AddPatientState extends State<AddPatient> {
   }
 
   posting() async {
-    int serId = 0;
+    /*int serId = 0;
     int rank = 1;
     print('Posting');
     print(_selectedSlot);
@@ -331,9 +333,9 @@ class _AddPatientState extends State<AddPatient> {
           'Status': 'A',
           'Rank': rank,
         }));
-    print(response.statusCode);
+    print(response.statusCode);*/
 
-    var appointmentDetails = await http.get(
+    /*var appointmentDetails = await http.get(
         Uri.parse('https://watduwantapi.pythonanywhere.com/api/appointments'),
         headers: {'Accept': 'application/json'});
     for (var detail in AllData.doctorsInfo) {
@@ -357,7 +359,10 @@ class _AddPatientState extends State<AddPatient> {
         }
       }
       detail['Appointments'] = x;
-    }
+    }*/
+    await addAppointment(
+        nameController.text, int.parse(ageController.text), _selectedSex[0], phoneController.text, _selectedDoctor, _timeIn12And24[_selectedSlot]);
+
     setState(() {
       loading = false;
     });

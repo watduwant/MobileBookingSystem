@@ -1,11 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:http/http.dart' as http;
 import 'package:booking_system/data/dataFetcher.dart';
-import 'package:booking_system/views/theDrawer.dart';
+import 'package:booking_system/Screens/theDrawer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
+import 'package:sizer/sizer.dart';
 import 'add_patient.dart';
 import 'loadingPage.dart';
 
@@ -30,7 +32,7 @@ class _DetailAppointmentState extends State<DetailAppointment> {
   TextEditingController patientName = TextEditingController();
   TextEditingController mobileNumber = TextEditingController();
   TextEditingController doctorName = TextEditingController();
-  late Timer _timer;
+  /*late Timer _timer;
 
   @override
   void initState() {
@@ -44,7 +46,7 @@ class _DetailAppointmentState extends State<DetailAppointment> {
   void dispose() {
     _timer.cancel();
     super.dispose();
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -59,21 +61,18 @@ class _DetailAppointmentState extends State<DetailAppointment> {
             child: Text(
               'Hello ${widget.userName.toUpperCase()} !',
               textAlign: TextAlign.end,
-              style: TextStyle( fontFamily: 'Amaranth', fontSize: 15, color: Colors.black),
+              style: TextStyle( fontFamily: 'Amaranth', fontSize: 12.0.sp, color: Colors.black),
             ),
           ),
-          SizedBox(width: 10.0,)
+          SizedBox(width: 10.0.sp,)
         ],
         leading: Builder(
-          builder: (context) => Padding(
-            padding: EdgeInsets.all(0),
-            child: ClipOval(
-              child: IconButton(
-                icon: Image.asset('assets/Images/logo_oct1.png'),
-                onPressed: () {
-                  Scaffold.of(context).openDrawer();
-                },
-              ),
+          builder: (context) => ClipOval(
+            child: IconButton(
+              icon: Image.asset('assets/Images/logo_oct1.png'),
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
             ),
           ),
         ),
@@ -88,15 +87,15 @@ class _DetailAppointmentState extends State<DetailAppointment> {
           children: <Widget>[
             Padding(
               padding: EdgeInsets.only(
-                  left: (MediaQuery.of(context).size.width) / 2.5),
+                  left: 40.w),
               child: Row(
                 children: [
                   Text(
                     date,
-                    style: TextStyle(fontFamily: 'Roboto',fontSize: 14, fontWeight: FontWeight.w500),
+                    style: TextStyle(fontFamily: 'Roboto',fontSize: 12.0.sp, fontWeight: FontWeight.w500),
                   ),
                   SizedBox(
-                    width: 20.0,
+                    width: 20.0.sp,
                   ),
                   GestureDetector(
                     child: Icon(Icons.calendar_today),
@@ -136,17 +135,17 @@ class _DetailAppointmentState extends State<DetailAppointment> {
               ),
             ),
             SizedBox(
-              height: 10.0,
+              height: 10.0.sp,
             ),
             Padding(
-              padding: EdgeInsets.only(left: 20.0, right: 20.0),
+              padding: EdgeInsets.only(left: 20.0.sp, right: 20.0.sp),
               child: MaterialButton(
                   color: Colors.black,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10.sp))),
                   child: Text('Accept All Appointments', style: TextStyle(
                       fontFamily: 'Amaranth',
                       color: Colors.white,
-                      fontSize: 16),),
+                      fontSize: 14.0.sp),),
                   onPressed: () async{
                     for(int i = 0; i<AllData.doctorsInfo.length; i++){
                       for(int j = 0; j<AllData.doctorsInfo[i]['Time'].length; j++){
@@ -173,7 +172,7 @@ class _DetailAppointmentState extends State<DetailAppointment> {
                     setState(() {
                       final snackBar = SnackBar(
                         content:
-                        Text('All Pending Appointments of the selected day have been Accepted', style: TextStyle(fontFamily: 'Roboto',color: Colors.white, fontSize: 14.0),),
+                        Text('All Pending Appointments of the selected day have been Accepted', style: TextStyle(fontFamily: 'Roboto',color: Colors.white, fontSize: 12.0.sp),),
                         behavior: SnackBarBehavior.floating,
                         backgroundColor: Colors.green,);
                       ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -181,7 +180,7 @@ class _DetailAppointmentState extends State<DetailAppointment> {
                   }),
             ),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20),
+              padding: EdgeInsets.symmetric(horizontal: 20.0.sp),
               child: ListView.builder(
                   itemCount: AllData.doctorsInfo.length,
                   shrinkWrap: true,
@@ -189,7 +188,7 @@ class _DetailAppointmentState extends State<DetailAppointment> {
                   scrollDirection: Axis.vertical,
                   itemBuilder: (BuildContext context, int index) {
                     return Container(
-                      margin: EdgeInsets.symmetric(vertical: 5),
+                      margin: EdgeInsets.symmetric(vertical: 5.0.sp),
                       decoration: BoxDecoration(boxShadow: [
                         BoxShadow(color: Colors.white, offset: Offset(0.0, 0.1))
                       ]),
@@ -205,52 +204,46 @@ class _DetailAppointmentState extends State<DetailAppointment> {
                                 children: <Widget>[
                                   Expanded(
                                     child: Container(
-                                      width:
-                                      MediaQuery.of(context).size.width / 3,
-                                      height:
-                                      MediaQuery.of(context).size.width / 3,
+                                      width: 33.w,
+                                      height: 33.w,
                                       decoration:
                                       BoxDecoration(color: Colors.grey[300]),
                                       child: Column(
                                         children: [
-                                          SizedBox(height: 15.0,),
+                                          SizedBox(height: 15.0.sp,),
                                           Container(
-                                            width:
-                                            MediaQuery.of(context).size.width / 5,
-                                            height:
-                                            MediaQuery.of(context).size.width / 5,
+                                            width: 18.w,
+                                            height: 18.w,
                                             decoration: BoxDecoration(
                                                 color: Colors.grey[300],
                                                 shape: BoxShape.circle,
                                                 image: DecorationImage(
                                                     fit: BoxFit.cover,
-                                                    image: NetworkImage(
+                                                    image: CachedNetworkImageProvider(
                                                       AllData.doctorsInfo[index]
                                                       ['Image'],
                                                     ))),
                                           ),
-                                          SizedBox(height: 10.0,),
+                                          SizedBox(height: 5.0.sp,),
                                           FittedBox(
                                             child: Text(
                                               AllData.doctorsInfo[index]['Doctor'],
                                               style: TextStyle(
                                                   fontFamily: 'Amaranth',
-                                                  fontSize: 14,
+                                                  fontSize: 12.0.sp,
                                                   fontWeight: FontWeight.w500),
                                             ),
                                             fit: BoxFit.scaleDown,
                                           ),
-                                          SizedBox(height: 10.0,)
+                                          SizedBox(height: 10.0.sp,)
                                         ],
                                       ),
                                     )
                                   ),
                                   Expanded(
                                     child: Container(
-                                      width:
-                                          MediaQuery.of(context).size.width / 3,
-                                      height:
-                                          MediaQuery.of(context).size.width / 3,
+                                      width: 33.w,
+                                      height: 33.w,
                                       decoration:
                                           BoxDecoration(color: Colors.grey[300]),
                                       child: Column(
@@ -263,17 +256,17 @@ class _DetailAppointmentState extends State<DetailAppointment> {
                                             'Timing',
                                             style: TextStyle(
                                               fontFamily: 'Amaranth',
-                                                    fontSize: 16,
+                                                    fontSize: 14.0.sp,
                                                     fontWeight: FontWeight.w500),
                                           ),
                                           SizedBox(
-                                            height: 9,
+                                            height: 10.0.sp,
                                           ),
                                           Text(
                                             DateFormat.jm().format(DateTime.parse('2021-01-01 ${AllData.doctorsInfo[index]['Time'][timing]}')),
                                             style: TextStyle(
                                               fontFamily: 'Roboto',
-                                                    fontSize: 14,
+                                                    fontSize: 12.0.sp,
                                                     fontWeight: FontWeight.w500),
                                           ),
                                         ],
@@ -282,10 +275,8 @@ class _DetailAppointmentState extends State<DetailAppointment> {
                                   ),
                                   Expanded(
                                     child: Container(
-                                      width:
-                                          MediaQuery.of(context).size.width / 3,
-                                      height:
-                                          MediaQuery.of(context).size.width / 3,
+                                      width: 33.w,
+                                      height: 33.w,
                                       decoration:
                                           BoxDecoration(color: Colors.grey[300]),
                                       child: Column(
@@ -297,17 +288,17 @@ class _DetailAppointmentState extends State<DetailAppointment> {
                                           Text(
                                             'Bookings',
                                             style: TextStyle(
-                                                    fontSize: 16,
+                                                    fontSize: 14.0.sp,
                                                     fontFamily: 'Amaranth',
                                                     fontWeight: FontWeight.w500),
                                           ),
                                           SizedBox(
-                                            height: 9,
+                                            height: 10.0.sp,
                                           ),
                                           Text(
                                             ' ${AllData.doctorsInfo[index]['Appointments'][timing].length} / ${AllData.doctorsInfo[index]['Slots'][timing]}',
                                             style: TextStyle(
-                                                    fontSize: 14,
+                                                    fontSize: 12.0.sp,
                                                     fontFamily: 'Roboto',
                                                     fontWeight: FontWeight.w500),
                                           ),
@@ -341,7 +332,7 @@ class _DetailAppointmentState extends State<DetailAppointment> {
                                           'View Patients',
                                           style: TextStyle(
                                             fontFamily: 'Amaranth',
-                                                  fontSize: 13,
+                                                  fontSize: 10.0.sp,
                                                   fontWeight: FontWeight.w700,
                                                   ),
                                         ),
@@ -390,7 +381,7 @@ class _DetailAppointmentState extends State<DetailAppointment> {
                                                                 .toString(),
                                                             style: TextStyle(
                                                               fontFamily: 'Roboto',
-                                                                    fontSize: 14,
+                                                                    fontSize: 11.0.sp,
                                                                     fontWeight:
                                                                         FontWeight
                                                                             .w500),
@@ -407,7 +398,7 @@ class _DetailAppointmentState extends State<DetailAppointment> {
                                                               style: TextStyle(
                                                                   fontFamily: 'Roboto',
                                                                       fontSize:
-                                                                          14,
+                                                                          11.0.sp,
                                                                       fontWeight:
                                                                           FontWeight
                                                                               .w500),
@@ -420,7 +411,7 @@ class _DetailAppointmentState extends State<DetailAppointment> {
                                                                 .toString(),
                                                             style: TextStyle(
                                                                 fontFamily: 'Roboto',
-                                                                    fontSize: 14,
+                                                                    fontSize: 11.0.sp,
                                                                     fontWeight:
                                                                         FontWeight
                                                                             .w500),
@@ -436,7 +427,7 @@ class _DetailAppointmentState extends State<DetailAppointment> {
                                                   );
                                             }),
                                           ),
-                                          SizedBox(height: 10.0,),
+                                          SizedBox(height: 10.0.sp,),
                                           Visibility(
                                             visible: AllData.doctorsInfo[index]['Appointments'][timing].length != 0,
                                               child: MaterialButton(
@@ -466,7 +457,7 @@ class _DetailAppointmentState extends State<DetailAppointment> {
                                                 ScaffoldMessenger.of(context).showSnackBar(snackBar);
                                               });
                                             },
-                                            height: 30.0,
+                                            height: 20.0.sp,
                                             color: Colors.grey[400],
                                                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10)
                                                 )),
@@ -487,7 +478,7 @@ class _DetailAppointmentState extends State<DetailAppointment> {
                           );
                         } else {
                           return SizedBox(
-                            width: 2.0,
+                            width: 2.w,
                           );
                         }
                       })),
@@ -495,7 +486,7 @@ class _DetailAppointmentState extends State<DetailAppointment> {
                   }),
             ),
             SizedBox(
-              height: 75,
+              height: 10.h,
             ),
           ],
         ),
@@ -527,7 +518,7 @@ class _DetailAppointmentState extends State<DetailAppointment> {
           onPressed: (){
             status = 'A';
           },
-        height: 30.0,
+        height: 30.0.sp,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
         color: Colors.black,
         child: FittedBox(
@@ -567,7 +558,7 @@ class _DetailAppointmentState extends State<DetailAppointment> {
                   'A';
             });
           },
-        height: 30.0,
+        height: 30.0.sp,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10)
         )),
         color: Colors.grey[400],
@@ -603,34 +594,34 @@ class _DetailAppointmentState extends State<DetailAppointment> {
   appointmentsAvailableOrNot(int index, int timing) {
     if (AllData.doctorsInfo[index]['Appointments'][timing].length != 0) {
       return Padding(
-        padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
+        padding: EdgeInsets.only(top: 15.0.sp, bottom: 15.0.sp),
         child: Row(
           children: <Widget>[
             Expanded(
               child: Text(
                 'Rank',
-                style: TextStyle(fontFamily: 'Amaranth',fontSize: 14, fontWeight: FontWeight.w500),
+                style: TextStyle(fontFamily: 'Amaranth',fontSize: 11.0.sp, fontWeight: FontWeight.w500),
               ),
             ),
             Expanded(
               child: Text(
                 'Name',
                 style:
-                    TextStyle(fontFamily: 'Amaranth', fontSize: 14, fontWeight: FontWeight.w500),
+                    TextStyle(fontFamily: 'Amaranth', fontSize: 11.0.sp, fontWeight: FontWeight.w500),
               ),
             ),
             Expanded(
               child: Text(
                 'Contact',
                 style:
-                    TextStyle(fontFamily: 'Amaranth',fontSize: 14, fontWeight: FontWeight.w500),
+                    TextStyle(fontFamily: 'Amaranth',fontSize: 11.0.sp, fontWeight: FontWeight.w500),
               ),
             ),
             Expanded(
               child: Text(
                 'Status',
                 style:
-                    TextStyle(fontFamily: 'Amaranth',fontSize: 14, fontWeight: FontWeight.w500),
+                    TextStyle(fontFamily: 'Amaranth',fontSize: 11.0.sp, fontWeight: FontWeight.w500),
               ),
             ),
           ],
@@ -639,46 +630,10 @@ class _DetailAppointmentState extends State<DetailAppointment> {
     } else {
       return Padding(
         padding:
-            EdgeInsets.only(top: 10.0, bottom: 10.0, left: 7.0, right: 7.0),
+            EdgeInsets.only(top: 10.0.sp, bottom: 10.0.sp, left: 7.0.sp, right: 7.0.sp),
         child: Text('No Appointments', style: TextStyle(fontFamily: 'Amaranth'),),
       );
     }
-  }
-
-  updateAppointments() async{
-    print('Updating Appointments');
-    var appointmentDetails = await http.get(
-        Uri.parse('https://watduwantapi.pythonanywhere.com/api/appointments'),
-        headers: {'Accept': 'application/json'});
-
-    print('Data Fetch over');
-
-    for (var detail in AllData.doctorsInfo) {
-      var x = List.generate(detail['Time'].length, (_) => []);
-      for (var appointment in jsonDecode(appointmentDetails.body)) {
-        for (var i = 0; i < detail['ServiceID'].length; i++) {
-          if (appointment['Service'] == detail['ServiceID'][i]) {
-            Map<String, dynamic> temp = {};
-            temp['id'] = appointment['id'];
-            temp['Customer ID'] = appointment['Customer'];
-            temp['Service ID'] = appointment['Service'];
-            temp['Patient'] = appointment['PatientName'];
-            temp['Age'] = appointment['Age'];
-            temp['Sex'] = appointment['Sex'];
-            temp['Rank'] = appointment['Rank'];
-            temp['Status'] = appointment['Status'];
-            temp['Date'] = appointment['date'];
-            temp['Contact'] = appointment['phone'];
-            x[i].add(temp);
-          }
-        }
-      }
-      detail['Appointments'] = x;
-    }
-
-    setState(() {
-      print('Appointments Updated');
-    });
   }
 
   String convertLetterTo3Letters(String d) {

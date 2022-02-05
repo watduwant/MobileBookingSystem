@@ -1,9 +1,10 @@
-import 'package:booking_system/views/theDrawer.dart';
+import 'package:booking_system/Screens/theDrawer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:booking_system/data/dataFetcher.dart';
 import 'package:intl/intl.dart';
+import 'package:sizer/sizer.dart';
 
 class DetailAnnouncement extends StatefulWidget {
   final String userName;
@@ -52,21 +53,18 @@ class _DetailAnnouncementState extends State<DetailAnnouncement> {
             child: Text(
               'Hello ${widget.userName.toUpperCase()} !',
               textAlign: TextAlign.end,
-              style: TextStyle( fontFamily: 'Amaranth', fontSize: 15, color: Colors.black),
+              style: TextStyle( fontFamily: 'Amaranth', fontSize: 12.0.sp, color: Colors.black),
             ),
           ),
-          SizedBox(width: 10.0,)
+          SizedBox(width: 10.0.sp,)
         ],
         leading: Builder(
-          builder: (context) => Padding(
-            padding: EdgeInsets.all(0),
-            child: ClipOval(
-              child: IconButton(
-                icon: Image.asset('assets/Images/logo_oct1.png'),
-                onPressed: () {
-                  Scaffold.of(context).openDrawer();
-                },
-              ),
+          builder: (context) => ClipOval(
+            child: IconButton(
+              icon: Image.asset('assets/Images/logo_oct1.png'),
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
             ),
           ),
         ),
@@ -80,23 +78,23 @@ class _DetailAnnouncementState extends State<DetailAnnouncement> {
           child: Column(
             children: <Widget>[
               Container(
-                width: MediaQuery.of(context).size.width,
+                width: 100.w,
                 color: Colors.black,
-                padding: EdgeInsets.all(5),
+                padding: EdgeInsets.all(5.0.sp),
                 child: Center(
                   child: Text(
                     'Announcement',
                     style: GoogleFonts.prompt(
                         textStyle: TextStyle(
-                            fontSize: 20,
+                            fontSize: 16.0.sp,
                             fontWeight: FontWeight.w600,
                             color: Colors.white)),
                   ),
                 ),
               ),
               Container(
-                margin: EdgeInsets.fromLTRB(20, 10, 20, 10),
-                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                margin: EdgeInsets.fromLTRB(20.0.sp, 10.0.sp, 20.0.sp, 10.0.sp),
+                padding: EdgeInsets.symmetric(horizontal: 10.0.sp, vertical: 10.0.sp),
                 child: Column(
                   children: <Widget>[
                     GestureDetector(
@@ -106,7 +104,7 @@ class _DetailAnnouncementState extends State<DetailAnnouncement> {
                               setDate.toString().substring(0, 10),
                               style: TextStyle(
                                   fontFamily: 'Amaranth',
-                                  fontSize: 22,
+                                  fontSize: 15.0.sp,
                                   fontWeight: FontWeight.w500),
                               textAlign: TextAlign.center,
                             ),
@@ -132,7 +130,6 @@ class _DetailAnnouncementState extends State<DetailAnnouncement> {
                             );
                           },
                         );
-
                         setDate = dateChosen!;
                         chosenDay = DateFormat('EEEE')
                             .format(dateChosen)
@@ -155,7 +152,7 @@ class _DetailAnnouncementState extends State<DetailAnnouncement> {
                           activeColor: Colors.black,
                           title: Text(e['Info'], style: TextStyle(
                               fontFamily: 'Roboto',
-                              fontSize: 16,),),
+                              fontSize: 14.0.sp,),),
                             value: e['isChecked'],
                             onChanged: (val){
                             setState(() {
@@ -173,10 +170,9 @@ class _DetailAnnouncementState extends State<DetailAnnouncement> {
                             }
                         );
                       }).toList(),
-
                     ),
                     SizedBox(
-                      height: 10,
+                      height: 2.h,
                     ),
                     Visibility(
                       visible: reasonTime,
@@ -187,7 +183,7 @@ class _DetailAnnouncementState extends State<DetailAnnouncement> {
                           decoration: InputDecoration(
                               border: OutlineInputBorder(),
                               contentPadding: EdgeInsets.symmetric(
-                                  vertical: 0, horizontal: 10)),
+                                  vertical: 0.0.sp, horizontal: 10.0.sp)),
                           items: _reasons
                               .map<DropdownMenuItem<String>>((String val) {
                             return DropdownMenuItem<String>(
@@ -195,16 +191,16 @@ class _DetailAnnouncementState extends State<DetailAnnouncement> {
                           }).toList()),
                     ),
                     SizedBox(
-                      height: 20,
+                      height: 20.0.sp,
                     ),
                     Container(
-                      height: 40,
-                      width: 100,
+                      height: 40.0.sp,
+                      width: 100.0.sp,
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(6),
+                        borderRadius: BorderRadius.circular(6.0.sp),
                         color: Colors.black,
                       ),
-                      padding: EdgeInsets.all(5),
+                      padding: EdgeInsets.all(5.0.sp),
                       child: MaterialButton(
                         onPressed: () {},
                         child: Center(
@@ -212,7 +208,7 @@ class _DetailAnnouncementState extends State<DetailAnnouncement> {
                             'Send',
                             style: GoogleFonts.prompt(
                                 textStyle: TextStyle(
-                                    fontSize: 17,
+                                    fontSize: 14.0.sp,
                                     fontWeight: FontWeight.w600,
                                     color: Colors.white)),
                           ),

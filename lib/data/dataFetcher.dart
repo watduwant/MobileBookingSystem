@@ -3,6 +3,7 @@ class AllData {
   static int userId = 0;
   static int clinicId = 0;
   static String username = ' ';
+  static String pincode = ' ';
   static String token = ' ';
   static String image = ' ';
   static String status = ' ';
@@ -12,6 +13,7 @@ class AllData {
   static String address = ' ';
   static String openingHours = ' ';
   static String closingDay = '';
+  static String link = '';
   static List<Map<String, dynamic>> doctorsInfo = [];
   static Map<String, List<dynamic>> doctorDetails = {};
 }

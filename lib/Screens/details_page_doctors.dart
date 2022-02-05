@@ -1,10 +1,12 @@
 import 'dart:convert';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:http/http.dart' as http;
 import 'package:booking_system/data/dataFetcher.dart';
-import 'package:booking_system/views/theDrawer.dart';
+import 'package:booking_system/Screens/theDrawer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
+import 'package:sizer/sizer.dart';
 import 'add_patient.dart';
 import 'loadingPage.dart';
 
@@ -61,21 +63,18 @@ class _DetailDoctorState extends State<DetailDoctor> {
             child: Text(
               'Hello ${widget.userName.toUpperCase()} !',
               textAlign: TextAlign.end,
-              style: TextStyle( fontFamily: 'Amaranth', fontSize: 15, color: Colors.black),
+              style: TextStyle( fontFamily: 'Amaranth', fontSize: 12.0.sp, color: Colors.black),
             ),
           ),
-          SizedBox(width: 10.0,)
+          SizedBox(width: 10.0.sp,)
         ],
         leading: Builder(
-          builder: (context) => Padding(
-            padding: EdgeInsets.all(0),
-            child: ClipOval(
-              child: IconButton(
-                icon: Image.asset('assets/Images/logo_oct1.png'),
-                onPressed: () {
-                  Scaffold.of(context).openDrawer();
-                },
-              ),
+          builder: (context) => ClipOval(
+            child: IconButton(
+              icon: Image.asset('assets/Images/logo_oct1.png'),
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
             ),
           ),
         ),
@@ -93,7 +92,7 @@ class _DetailDoctorState extends State<DetailDoctor> {
               child: Column(
                 children: [
                   SizedBox(
-                    height: 10.0,
+                    height: 10.0.sp,
                   ),
                   ListView.builder(
                       shrinkWrap: true,
@@ -103,31 +102,30 @@ class _DetailDoctorState extends State<DetailDoctor> {
                       itemBuilder: (BuildContext context, int index) {
                         return Card(
                             child: Column(
-                          children: [
-                            Container(
-                              height: MediaQuery.of(context).size.width / 4,
-                              child: Row(
-                                children: [
-                                  Padding(padding: EdgeInsets.only(left: 20.0),child: Container(
-                                    width: MediaQuery.of(context).size.width / 4,
-                                    child: ClipOval(
+                              children: [
+                                Container(
+                                  height: 27.w,
+                                  child: Row(
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.only(left: 20.0.sp),
                                         child: Container(
+                                        width: 25.w,
+                                        child: ClipOval(
+                                          child: Container(
                                           decoration: BoxDecoration(
                                               shape: BoxShape.circle,
                                               color: Colors.black,
                                               image: DecorationImage(
                                                   fit: BoxFit.cover,
-                                                  image: NetworkImage(
+                                                  image: CachedNetworkImageProvider(
                                                     AllData.doctorsInfo[index]
                                                     ['Image'],
                                                   ))),
                                         )),
                                   ),),
                                   Container(
-                                    width: MediaQuery.of(context).size.width *
-                                            3 /
-                                            4 -
-                                        40.0,
+                                    width: 66.w,
                                     //height: MediaQuery.of(context).size.width *3/4,
                                     child: Column(
                                       mainAxisAlignment: MainAxisAlignment.center,
@@ -139,7 +137,7 @@ class _DetailDoctorState extends State<DetailDoctor> {
                                               //textAlign: TextAlign.center,
                                               style: TextStyle(
                                                   fontFamily: 'Amaranth',
-                                                  fontSize: 18,
+                                                  fontSize: 14.0.sp,
                                                   fontWeight: FontWeight.w600,
                                                   color: Colors.black),
                                             ),
@@ -148,24 +146,24 @@ class _DetailDoctorState extends State<DetailDoctor> {
                                         ),
                                         Row(
                                           children: [
-                                            SizedBox(width: 40.0,),
+                                            SizedBox(width: 10.0.sp,),
                                             Expanded(child: Text(
                                               'Specialization : ',
                                               textAlign: TextAlign.end,
                                               style: TextStyle(
                                                   fontFamily: 'Roboto',
-                                                  fontSize: 14,
+                                                  fontSize: 11.0.sp,
                                                   fontWeight: FontWeight.bold,
                                                   color: Colors.black),
                                             ),),
-                                            SizedBox(width: 10.0,),
+                                            SizedBox(width: 10.0.sp,),
                                             Expanded(child: Text(
                                               AllData.doctorsInfo[index]
                                               ['Specialization'],
                                               //textAlign: TextAlign.center,
                                               style: TextStyle(
                                                   fontFamily: 'Roboto',
-                                                  fontSize: 14,
+                                                  fontSize: 11.0.sp,
                                                   fontWeight: FontWeight.bold,
                                                   color: Colors.black),
                                             ),)
@@ -173,23 +171,23 @@ class _DetailDoctorState extends State<DetailDoctor> {
                                         ),
                                         Row(
                                           children: [
-                                            SizedBox(width: 40.0,),
+                                            SizedBox(width: 10.0.sp,),
                                             Expanded(child: Text(
                                               'Experience : ',
                                               textAlign: TextAlign.end,
                                               style: TextStyle(
                                                   fontFamily: 'Roboto',
-                                                  fontSize: 14,
+                                                  fontSize: 12.0.sp,
                                                   fontWeight: FontWeight.bold,
                                                   color: Colors.black),
                                             ),),
-                                            SizedBox(width: 10.0,),
+                                            SizedBox(width: 10.0.sp,),
                                             Expanded(child: Text(
                                               '${AllData.doctorsInfo[index]['Experience'].toString()} years',
                                               //textAlign: TextAlign.center,
                                               style: TextStyle(
                                                   fontFamily: 'Roboto',
-                                                  fontSize: 14,
+                                                  fontSize: 12.0.sp,
                                                   fontWeight: FontWeight.bold,
                                                   color: Colors.black),
                                             ),)
@@ -197,23 +195,23 @@ class _DetailDoctorState extends State<DetailDoctor> {
                                         ),
                                         Row(
                                           children: [
-                                            SizedBox(width: 40.0,),
+                                            SizedBox(width: 10.0.sp,),
                                             Expanded(child: Text(
                                               'Fees : ',
                                               textAlign: TextAlign.end,
                                               style: TextStyle(
                                                   fontFamily: 'Roboto',
-                                                  fontSize: 14,
+                                                  fontSize: 12.0.sp,
                                                   fontWeight: FontWeight.bold,
                                                   color: Colors.black),
                                             ),),
-                                            SizedBox(width: 10.0,),
+                                            SizedBox(width: 10.0.sp,),
                                             Expanded(child: Text(
                                               '₹ ${AllData.doctorsInfo[index]['Fees'][0]}',
                                               //textAlign: TextAlign.center,
                                               style: TextStyle(
                                                   fontFamily: 'Roboto',
-                                                  fontSize: 14,
+                                                  fontSize: 12.0.sp,
                                                   fontWeight: FontWeight.bold,
                                                   color: Colors.black),
                                             ),)
@@ -225,25 +223,37 @@ class _DetailDoctorState extends State<DetailDoctor> {
                                 ],
                               ),
                             ),
-                            SizedBox(
-                              height: 20.0,
+                                SizedBox(
+                              height: 10.0.sp,
                             ),
                             Row(
                               children: [
                                 Expanded(
                                     flex: 3,
                                     child: Center(
-                                      child: Text('Visit'),
+                                      child: Text('Visit', style: TextStyle(
+                                        fontFamily: 'Amaranth',
+                                        fontSize: 12.0.sp,
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.black,)),
                                     )),
                                 Expanded(
                                     flex: 3,
                                     child: Center(
-                                      child: Text('Time'),
+                                      child: Text('Time', style: TextStyle(
+                                        fontFamily: 'Amaranth',
+                                        fontSize: 12.0.sp,
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.black,)),
                                     )),
                                 Expanded(
                                     flex: 3,
                                     child: Center(
-                                      child: Text('Slots'),
+                                      child: Text('Slots', style: TextStyle(
+                                        fontFamily: 'Amaranth',
+                                        fontSize: 12.0.sp,
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.black,)),
                                     )),
                                 Expanded(
                                     flex: 1,
@@ -261,13 +271,13 @@ class _DetailDoctorState extends State<DetailDoctor> {
                               ],
                             ),
                             SizedBox(
-                              height: 10.0,
+                              height: 10.0.sp,
                             ),
                             Row(
                               children: [
                                 Expanded(
                                   flex: 3,
-                                  child: Center(child: _visit(index)),
+                                  child: Center(child: _visit(index),),
                                 ),
                                 Expanded(
                                   flex: 3,
@@ -282,7 +292,7 @@ class _DetailDoctorState extends State<DetailDoctor> {
                               visible: edits[index],
                               child: Row(
                               children: [
-                                SizedBox(width: 15.0,),
+                                SizedBox(width: 15.0.sp,),
                                 Expanded(
                                     flex: 2,
                                     child: MaterialButton(
@@ -301,7 +311,7 @@ class _DetailDoctorState extends State<DetailDoctor> {
                               ],
                             ),),
                             SizedBox(
-                              height: 50.0,
+                              height: 40.0.sp,
                             ),
                           ],
                         ));
@@ -377,14 +387,14 @@ class _DetailDoctorState extends State<DetailDoctor> {
               }
 
               final url = Uri.parse(
-                  'https://watduwantapi.pythonanywhere.com/api/services/${AllData.doctorsInfo[index]['Service id'][i]}/');
+                  'https://watduwantapi.pythonanywhere.com/api/servicedetailsday/${AllData.doctorsInfo[index]['Service Day ID'][i]}/');
               var response = await http.patch(url,
                   headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json',
                   },
                   body: jsonEncode({
-                    'day': d,
+                    'Day': d,
                   }));
               print(response.statusCode);
             },
@@ -419,7 +429,7 @@ class _DetailDoctorState extends State<DetailDoctor> {
               DropdownMenuItem(
                   child: Text(AllData.doctorsInfo[index]['Time'][i])),
               SizedBox(
-                width: 10.0,
+                width: 10.0.sp,
               ),
               GestureDetector(
                 child: Icon(Icons.schedule),
@@ -449,7 +459,7 @@ class _DetailDoctorState extends State<DetailDoctor> {
                   });
 
                   final url = Uri.parse(
-                      'https://watduwantapi.pythonanywhere.com/api/servicedetails/${AllData.doctorsInfo[index]['ServiceID'][i]}/');
+                      'https://watduwantapi.pythonanywhere.com/api/servicedetailsdaytime/${AllData.doctorsInfo[index]['Service Time ID'][i]}/');
                   var response = await http.patch(url,
                       headers: {
                         'Accept': 'application/json',
@@ -491,7 +501,7 @@ class _DetailDoctorState extends State<DetailDoctor> {
                     AllData.doctorsInfo[index]['Slots'][i] -= 1;
                   });
                   final url = Uri.parse(
-                      'https://watduwantapi.pythonanywhere.com/api/servicedetails/${AllData.doctorsInfo[index]['ServiceID'][i]}/');
+                      'https://watduwantapi.pythonanywhere.com/api/servicedetailsdaytime/${AllData.doctorsInfo[index]['Service Time ID'][i]}/');
                   var response = await http.patch(url,
                       headers: {
                         'Accept': 'application/json',
@@ -505,15 +515,15 @@ class _DetailDoctorState extends State<DetailDoctor> {
                 },
               ),
               SizedBox(
-                width: 10.0,
+                width: 10.0.sp,
               ),
               DropdownMenuItem(
                   child: Text(
                 AllData.doctorsInfo[index]['Slots'][i].toString(),
-                style: TextStyle(fontSize: 14, color: Colors.black),
+                style: TextStyle(fontSize: 12.0.sp, color: Colors.black),
               )),
               SizedBox(
-                width: 10.0,
+                width: 10.0.sp,
               ),
               GestureDetector(
                 child: Icon(Icons.add),
@@ -522,7 +532,7 @@ class _DetailDoctorState extends State<DetailDoctor> {
                     AllData.doctorsInfo[index]['Slots'][i] += 1;
                   });
                   final url = Uri.parse(
-                      'https://watduwantapi.pythonanywhere.com/api/servicedetails/${AllData.doctorsInfo[index]['ServiceID'][i]}/');
+                      'https://watduwantapi.pythonanywhere.com/api/servicedetailsdaytime/${AllData.doctorsInfo[index]['Service Time ID'][i]}/');
                   var response = await http.patch(url,
                       headers: {
                         'Accept': 'application/json',
@@ -544,7 +554,7 @@ class _DetailDoctorState extends State<DetailDoctor> {
         children: List.generate(AllData.doctorsInfo[index]['Day'].length, (i) {
           return Text(
             AllData.doctorsInfo[index]['Slots'][i].toString(),
-            style: TextStyle(fontSize: 14, color: Colors.black),
+            style: TextStyle(fontSize: 12.0.sp, color: Colors.black),
           );
         }),
       );
@@ -637,6 +647,14 @@ class _DetailDoctorState extends State<DetailDoctor> {
                             )
                           ],
                         )
+                    ),
+                    Container(
+                      padding: EdgeInsets.all(10.0.sp),
+                      child: Text('Note :- Adding a day is irreversible', style: TextStyle(
+                          fontFamily: 'Amaranth',
+                          fontSize: 14.0.sp,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.red),),
                     )
                   ],
                 ),
@@ -667,7 +685,7 @@ class _DetailDoctorState extends State<DetailDoctor> {
                       } else if (addDayVisit == 'Sat') {
                         d = '6';
                       } else {
-                        d = '0';
+                        d = '7';
                       }
                       var response = await http.post(url,
                           headers: {
@@ -677,7 +695,6 @@ class _DetailDoctorState extends State<DetailDoctor> {
                           body: jsonEncode({
                             'Clinic' : AllData.clinicId,
                             'Doctor' : AllData.doctorsInfo[index]['id'],
-                            'day' : d,
                             'Fees' : 500,
                           }));
                       print(response.statusCode);
@@ -685,33 +702,58 @@ class _DetailDoctorState extends State<DetailDoctor> {
                       var serviceDetails = await http.get(
                           Uri.parse('https://watduwantapi.pythonanywhere.com/api/services'),
                           headers: {'Accept': 'application/json'});
-                      int Serviceid = jsonDecode(serviceDetails.body)[jsonDecode(serviceDetails.body).length-1]['id'];
+                      int ServiceID = jsonDecode(serviceDetails.body)[jsonDecode(serviceDetails.body).length-1]['id'];
 
-                      final url1 = Uri.parse('https://watduwantapi.pythonanywhere.com/api/servicedetails/');
+                      final url1 = Uri.parse('https://watduwantapi.pythonanywhere.com/api/servicedetailsday/');
                       var response1 = await http.post(url1,
                           headers: {
                             'Accept': 'application/json',
                             'Content-Type': 'application/json',
                           },
                           body: jsonEncode({
-                            'ServiceID' : Serviceid,
-                            'Time' : addDayTime,
-                            'Visit_capacity' : int.parse(addDaySlots),
+                            'ServiceID' : ServiceID,
+                            "Day": d
                           }));
                       print(response1.statusCode);
 
-                      var servicedetails = await http.get(
-                          Uri.parse('https://watduwantapi.pythonanywhere.com/api/servicedetails'),
+                      var servicedetailsday = await http.get(
+                          Uri.parse('https://watduwantapi.pythonanywhere.com/api/servicedetailsday'),
                           headers: {'Accept': 'application/json'});
-                      int ServiceDetailsid = jsonDecode(servicedetails.body)[jsonDecode(servicedetails.body).length-1]['id'];
+                      int ServiceDetailsDayid = jsonDecode(servicedetailsday.body)[jsonDecode(servicedetailsday.body).length-1]['id'];
+
+                      final url2 = Uri.parse('https://watduwantapi.pythonanywhere.com/api/servicedetailsdaytime/');
+                      var response2 = await http.post(url2,
+                          headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json',
+                          },
+                          body: jsonEncode({
+                            "ServiceDetailsDayID": ServiceDetailsDayid,
+                            "Time": addDayTime,
+                            'Visit_capacity' : int.parse(addDaySlots),
+                          }));
+                      print(response2.statusCode);
+
+                      var servicedetails = await http.get(
+                          Uri.parse('https://watduwantapi.pythonanywhere.com/api/servicedetailsdaytime'),
+                          headers: {'Accept': 'application/json'});
+                      int ServiceDetailTimesid = jsonDecode(servicedetails.body)[jsonDecode(servicedetails.body).length-1]['id'];
 
                       setState(() {
-                        AllData.doctorsInfo[index]['Day'].add(addDayVisit);
+                        /*AllData.doctorsInfo[index]['Day'].add(addDayVisit);
                         AllData.doctorsInfo[index]['Service id'].add(Serviceid);
                         AllData.doctorsInfo[index]['Time'].add(addDayTime);
                         AllData.doctorsInfo[index]['Fees'].add(500);
                         AllData.doctorsInfo[index]['Slots'].add(int.parse(addDaySlots));
-                        AllData.doctorsInfo[index]['ServiceID'].add(ServiceDetailsid);
+                        AllData.doctorsInfo[index]['ServiceID'].add(ServiceDetailsid);*/
+
+                        AllData.doctorsInfo[index]['Service ID'].add(ServiceID);
+                        AllData.doctorsInfo[index]['Time'].add(addDayTime);
+                        AllData.doctorsInfo[index]['Fees'].add(500);
+                        AllData.doctorsInfo[index]['Slots'].add(int.parse(addDaySlots));
+                        AllData.doctorsInfo[index]['Service Day ID'].add(ServiceDetailsDayid);
+                        AllData.doctorsInfo[index]['Service Time ID'].add(ServiceDetailTimesid);
+                        AllData.doctorsInfo[index]['Day'].add(addDayVisit);
                         addingDay = false;
                       });
                       Navigator.of(context).pop();
@@ -726,7 +768,7 @@ class _DetailDoctorState extends State<DetailDoctor> {
     );
   }
 
-  updateAppointments() async {
+  /*updateAppointments() async {
     print('Updating Appointments');
     var appointmentDetails = await http.get(
         Uri.parse('https://watduwantapi.pythonanywhere.com/api/appointments'),
@@ -759,7 +801,7 @@ class _DetailDoctorState extends State<DetailDoctor> {
     setState(() {
       print('Appointments Updated');
     });
-  }
+  }*/
 
   String convertLetterTo3Letters(String d) {
     if (d == '1') {

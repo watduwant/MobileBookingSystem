@@ -1,10 +1,9 @@
-import 'package:booking_system/views/details_page_doctors.dart';
-import 'package:booking_system/views/details_page_announcement.dart';
-import 'package:booking_system/views/details_page_appointment.dart';
-import 'package:booking_system/views/details_page_home.dart';
-import 'package:booking_system/views/details_page_support.dart';
+import 'package:booking_system/Screens/details_page_doctors.dart';
+import 'package:booking_system/Screens/details_page_announcement.dart';
+import 'package:booking_system/Screens/details_page_appointment.dart';
+import 'package:booking_system/Screens/details_page_home.dart';
+import 'package:booking_system/Screens/details_page_support.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'home.dart';
 
 class TheDrawer extends StatefulWidget {
