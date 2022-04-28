@@ -36,8 +36,9 @@ dependencies:
   http: ^0.13.0
   image_picker: ^0.8.3
   intl: ^0.17.0
-  shared_preferences: ^2.0.6
+  shared_preferences: ^2.0.13
   sizer: ^2.0.13
+  twilio_flutter: ^0.0.9
 
 dev_dependencies:
   flutter_test:

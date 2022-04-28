@@ -113,8 +113,8 @@ class _DetailAnnouncementState extends State<DetailAnnouncement> {
                         var dateChosen = await showDatePicker(
                           context: context,
                           initialDate: setDate,
-                          firstDate: DateTime(2020),
-                          lastDate: DateTime(2022),
+                          firstDate: DateTime.now(),
+                          lastDate: DateTime.now().add(Duration(days: 7)),
                           builder: (BuildContext context, Widget? child) {
                             return Theme(
                               data: ThemeData.dark().copyWith(

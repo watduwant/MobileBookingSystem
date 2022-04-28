@@ -3,16 +3,21 @@ import 'package:booking_system/data/UpdateAppointments.dart';
 import 'package:http/http.dart' as http;
 import 'package:booking_system/data/dataFetcher.dart';
 
+import '../Local DB/localdb.dart';
+
 addAppointment(
     String name,
     int age,
     String sex,
     String phone,
     String doctor,
-    var time
+    String time,
+    String day,
+    int serviceId
     ) async {
-  int serId = 0;
-  int rank = 1;
+  String token = await LocalDb.loginDetails();
+  // int serId = 0;
+  /*int rank = 1;
   print('Posting');
   for (var i in AllData.doctorsInfo) {
     if (i['Doctor'] == doctor) {
@@ -28,25 +33,29 @@ addAppointment(
         }
       }
     }
-  }
+  }*/
+  Map<String, dynamic> data = {
+    "Customer": AllData.home.userId,
+    "Service": serviceId,
+    "PatientName": "$name",
+    "Age": age,
+    "Sex": "$sex",
+    "phone": "$phone",
+    "Status": "A",
+    // 'Rank': rank,
+    "day": "$day",
+    "time": "$time"
+  };
+  const JsonEncoder encoder = JsonEncoder.withIndent('  ');
+  String dataSent = encoder.convert(data);
 
-  final url =
-  Uri.parse('https://watduwantapi.pythonanywhere.com/api/appointments/');
+  final url = Uri.parse('https://watduwantapi.pythonanywhere.com/api/appointments/');
   var response = await http.post(url,
       headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
+        'Authorization': 'Token $token',
+        'Content-Type' : 'application/json'
       },
-      body: jsonEncode({
-        'Customer': AllData.userId,
-        'Service': serId,
-        'PatientName': name,
-        'Age': age,
-        'Sex':sex,
-        'phone': phone,
-        'Status': 'A',
-        'Rank': rank,
-      }));
+      body: dataSent);
   print(response.statusCode);
 
   await updateAppointments();

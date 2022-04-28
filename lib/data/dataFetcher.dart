@@ -1,3 +1,8 @@
+import 'package:booking_system/Models/appointments.dart';
+import 'package:booking_system/Models/doctorsInfoModel.dart';
+import 'package:booking_system/Models/viewDoctors.dart';
+
+import '../Models/homeModel.dart';
 
 class AllData {
   static int userId = 0;
@@ -15,18 +20,9 @@ class AllData {
   static String closingDay = '';
   static String link = '';
   static List<Map<String, dynamic>> doctorsInfo = [];
+  static List<DoctorsInfo> allDoctorsInformation = [];
   static Map<String, List<dynamic>> doctorDetails = {};
+  static List<ViewDoctors> doctors = [];
+  static List<List<Appointments>> appointments = [];
+  static late Home home;
 }
-
-/*
-temp['Doctor'] = doctor['Name'];
-                temp['Specialization'] = doctor['Specialization'];
-                temp['id'] = doctor['id'];
-                temp['Image'] = doctor['Image'];
-                temp['Service id'] = serviceDetail['ServiceID'];
-                temp['Time'] = serviceDetail['Time'];
-                temp['Fees'] = serviceDetail['Fees'];
-                temp['Slots'] = serviceDetail['Visit_capacity'];
-                temp['Day'] = service['day'];
- */
-

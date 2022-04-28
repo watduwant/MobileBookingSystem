@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'package:booking_system/Models/viewDoctors.dart';
+import 'package:booking_system/Services/ViewDoctors.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:http/http.dart' as http;
 import 'package:booking_system/data/dataFetcher.dart';
@@ -7,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
-import 'add_patient.dart';
+import 'addPatient.dart';
 import 'loadingPage.dart';
 
 class DetailDoctor extends StatefulWidget {
@@ -24,13 +26,34 @@ class _DetailDoctorState extends State<DetailDoctor> {
   TextEditingController patientName = TextEditingController();
   TextEditingController mobileNumber = TextEditingController();
   TextEditingController doctorName = TextEditingController();
-  List<bool> edits = List.filled(AllData.doctorsInfo.length, false);
+  List<bool> edits = List.filled(AllData.doctors.length, false);
   List<String> days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
   bool addingDay = false;
   String addDayVisit = 'Select Day';
   List<String> addDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun', 'Select Day'];
   String addDayTime = 'Select Time';
   String addDaySlots = 'Select Slots';
+  bool _loading = true;
+
+  callDoctorsApi() async {
+    await Doctors.getDoctors().then((value) {
+      if (value != null) {
+        setState(() {
+          AllData.doctors = value;
+          edits = List.filled(AllData.doctors.length, false);
+          _loading = false;
+          print(value.length);
+          print('Done!');
+        });
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    callDoctorsApi();
+  }
 
   /*late Timer _timer;
 
@@ -87,7 +110,7 @@ class _DetailDoctorState extends State<DetailDoctor> {
         },
         child: SingleChildScrollView(
           physics: ClampingScrollPhysics(),
-          child: Container(
+          child: AllData.doctors.length != 0 ? Container(
               color: Colors.white,
               child: Column(
                 children: [
@@ -96,7 +119,7 @@ class _DetailDoctorState extends State<DetailDoctor> {
                   ),
                   ListView.builder(
                       shrinkWrap: true,
-                      itemCount: AllData.doctorsInfo.length,
+                      itemCount: AllData.doctors.length,
                       physics: ScrollPhysics(),
                       scrollDirection: Axis.vertical,
                       itemBuilder: (BuildContext context, int index) {
@@ -119,22 +142,19 @@ class _DetailDoctorState extends State<DetailDoctor> {
                                               image: DecorationImage(
                                                   fit: BoxFit.cover,
                                                   image: CachedNetworkImageProvider(
-                                                    AllData.doctorsInfo[index]
-                                                    ['Image'],
+                                                    'https://watduwantapi.pythonanywhere.com${AllData.doctors[index].doctor.image}',
                                                   ))),
                                         )),
                                   ),),
                                   Container(
                                     width: 66.w,
-                                    //height: MediaQuery.of(context).size.width *3/4,
                                     child: Column(
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
                                         Center(
                                           child: FittedBox(
                                             child: Text(
-                                              AllData.doctorsInfo[index]['Doctor'],
-                                              //textAlign: TextAlign.center,
+                                              AllData.doctors[index].doctor.name,
                                               style: TextStyle(
                                                   fontFamily: 'Amaranth',
                                                   fontSize: 14.0.sp,
@@ -158,8 +178,7 @@ class _DetailDoctorState extends State<DetailDoctor> {
                                             ),),
                                             SizedBox(width: 10.0.sp,),
                                             Expanded(child: Text(
-                                              AllData.doctorsInfo[index]
-                                              ['Specialization'],
+                                              AllData.doctors[index].doctor.specialization,
                                               //textAlign: TextAlign.center,
                                               style: TextStyle(
                                                   fontFamily: 'Roboto',
@@ -183,7 +202,7 @@ class _DetailDoctorState extends State<DetailDoctor> {
                                             ),),
                                             SizedBox(width: 10.0.sp,),
                                             Expanded(child: Text(
-                                              '${AllData.doctorsInfo[index]['Experience'].toString()} years',
+                                              '${AllData.doctors[index].doctor.experience.toString()} years',
                                               //textAlign: TextAlign.center,
                                               style: TextStyle(
                                                   fontFamily: 'Roboto',
@@ -207,7 +226,7 @@ class _DetailDoctorState extends State<DetailDoctor> {
                                             ),),
                                             SizedBox(width: 10.0.sp,),
                                             Expanded(child: Text(
-                                              '₹ ${AllData.doctorsInfo[index]['Fees'][0]}',
+                                              '₹ ${AllData.doctors[index].fees.toString()}',
                                               //textAlign: TextAlign.center,
                                               style: TextStyle(
                                                   fontFamily: 'Roboto',
@@ -273,7 +292,184 @@ class _DetailDoctorState extends State<DetailDoctor> {
                             SizedBox(
                               height: 10.0.sp,
                             ),
-                            Row(
+                            Column(
+                              children: List.generate(AllData.doctors[index].serviceDetailsDays.length, (i){
+                                return Column(
+                                  children: List.generate(AllData.doctors[index].serviceDetailsDays[i].serviceDetailsDayTimes.length, (j){
+                                    return Row(
+                                      children: [
+                                        Expanded(
+                                          flex: 3,
+                                          child: Container(
+                                            alignment: Alignment.center,
+                                            child: edits[index] ? DropdownButton<String>(
+                                              value: convertLetterTo3Letters(AllData.doctors[index].serviceDetailsDays[i].day),
+                                              icon: Icon(Icons.arrow_downward),
+                                              onChanged: (String? newValue) async {
+                                                String d = '';
+
+                                                if (newValue == 'Mon') {
+                                                  d = '1';
+                                                } else if (newValue == 'Tue') {
+                                                  d = '2';
+                                                } else if (newValue == 'Wed') {
+                                                  d = '3';
+                                                } else if (newValue == 'Thu') {
+                                                  d = '4';
+                                                } else if (newValue == 'Fri') {
+                                                  d = '5';
+                                                } else if (newValue == 'Sat') {
+                                                  d = '6';
+                                                } else {
+                                                  d = '0';
+                                                }
+
+                                                setState(() {
+                                                  AllData.doctors[index].serviceDetailsDays[i].day = d;
+                                                });
+                                                
+                                                await Doctors.editVisit(AllData.doctors[index].serviceDetailsDays[i].id.toString(), d).then((value){
+                                                  if(value){
+                                                    print('Success');
+                                                  }
+                                                  else{
+                                                    print('Failed');
+                                                  }
+                                                });
+                                              },
+                                              items: days.map<DropdownMenuItem<String>>((String value) {
+                                                return DropdownMenuItem<String>(
+                                                  value: value,
+                                                  child: Text(value),
+                                                );
+                                              }).toList(),
+                                            )
+                                                : Text(convertLetterTo3Letters(AllData.doctors[index].serviceDetailsDays[i].day)),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          flex: 3,
+                                          child: Container(
+                                            alignment: Alignment.center,
+                                            child: edits[index] ? Row(
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              children: [
+                                                DropdownMenuItem(
+                                                    child: Text(AllData.doctors[index].serviceDetailsDays[i].serviceDetailsDayTimes[j].time)),
+                                                SizedBox(
+                                                  width: 10.0.sp,
+                                                ),
+                                                GestureDetector(
+                                                  child: Icon(Icons.schedule),
+                                                  onTap: () async {
+                                                    final time1 = await showTimePicker(
+                                                      context: context,
+                                                      builder: (BuildContext context, Widget? child) {
+                                                        return Theme(
+                                                          data: ThemeData.dark().copyWith(
+                                                            colorScheme: ColorScheme.dark(
+                                                              primary: Colors.black,
+                                                              onPrimary: Colors.white,
+                                                              surface: Colors.white,
+                                                              onSurface: Colors.black87,
+                                                            ),
+                                                            dialogBackgroundColor: Colors.white,
+                                                          ),
+                                                          child: child ?? Text(""),
+                                                        );
+                                                      },
+                                                      initialTime: TimeOfDay.fromDateTime(DateTime.now()),
+                                                    );
+                                                    timing.text = (time1.toString().substring(10, 15) + ":00");
+
+                                                    setState(() {
+                                                      AllData.doctors[index].serviceDetailsDays[i].serviceDetailsDayTimes[j].time = timing.text;
+                                                    });
+
+                                                    await Doctors.editTime(AllData.doctors[index].serviceDetailsDays[i].serviceDetailsDayTimes[j].id.toString(), timing.text).then((value){
+                                                      if(value){
+                                                        print('Success');
+                                                      }
+                                                      else{
+                                                        print('Failed');
+                                                      }
+                                                    });
+
+                                                  },
+                                                )
+                                              ],
+                                            )
+                                                : Text(AllData.doctors[index].serviceDetailsDays[i].serviceDetailsDayTimes[j].time),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          flex: 3,
+                                          child: Container(
+                                            alignment: Alignment.center,
+                                            child: edits[index] ? Row(
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              children: [
+                                                GestureDetector(
+                                                  child: Icon(Icons.remove),
+                                                  onTap: () async {
+                                                    int newSlot = AllData.doctors[index].serviceDetailsDays[i].serviceDetailsDayTimes[j].visitCapacity - 1;
+                                                    setState(() {
+                                                      AllData.doctors[index].serviceDetailsDays[i].serviceDetailsDayTimes[j].visitCapacity = newSlot;
+                                                    });
+                                                    await Doctors.editSlots(AllData.doctors[index].serviceDetailsDays[i].serviceDetailsDayTimes[j].id.toString(), newSlot).then((value){
+                                                      if(value){
+                                                        print('Success');
+                                                      }
+                                                      else{
+                                                        print('Failed');
+                                                      }
+                                                    });
+                                                  },
+                                                ),
+                                                SizedBox(
+                                                  width: 10.0.sp,
+                                                ),
+                                                DropdownMenuItem(
+                                                    child: Text(
+                                                      AllData.doctors[index].serviceDetailsDays[i].serviceDetailsDayTimes[j].visitCapacity.toString(),
+                                                      style: TextStyle(fontSize: 12.0.sp, color: Colors.black),
+                                                    )),
+                                                SizedBox(
+                                                  width: 10.0.sp,
+                                                ),
+                                                GestureDetector(
+                                                  child: Icon(Icons.add),
+                                                  onTap: () async {
+                                                    int newSlot = AllData.doctors[index].serviceDetailsDays[i].serviceDetailsDayTimes[j].visitCapacity + 1;
+                                                    setState(() {
+                                                      AllData.doctors[index].serviceDetailsDays[i].serviceDetailsDayTimes[j].visitCapacity = newSlot;
+                                                    });
+                                                    await Doctors.editSlots(AllData.doctors[index].serviceDetailsDays[i].serviceDetailsDayTimes[j].id.toString(), newSlot).then((value){
+                                                      if(value){
+                                                        print('Success');
+                                                      }
+                                                      else{
+                                                        print('Failed');
+                                                      }
+                                                    });
+                                                  },
+                                                ),
+                                              ],
+                                            )
+                                                : Text(AllData.doctors[index].serviceDetailsDays[i].serviceDetailsDayTimes[j].visitCapacity.toString()),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          flex: 1,
+                                          child: Container(),
+                                        )
+                                      ],
+                                    );
+                                  }),
+                                );
+                              }),
+                            ),
+                            /*Row(
                               children: [
                                 Expanded(
                                   flex: 3,
@@ -287,7 +483,7 @@ class _DetailDoctorState extends State<DetailDoctor> {
                                     flex: 3, child: Center(child: _slots(index))),
                                 Expanded(flex: 1, child: Text(''))
                               ],
-                            ),
+                            ),*/
                             Visibility(
                               visible: edits[index],
                               child: Row(
@@ -317,7 +513,17 @@ class _DetailDoctorState extends State<DetailDoctor> {
                         ));
                       }),
                 ],
-              )),
+              )) : _loading ? Container(
+                                color: Colors.white,
+                                child: Center(
+                                  child: CircularProgressIndicator(),
+                                ),
+                              ) : Container(
+                                    color: Colors.white,
+                                    child: Center(
+                                      child: Text('No Doctors Available'),
+                                    ),
+                                  )
         ),
       ),
       floatingActionButton: FloatingActionButton(
@@ -357,7 +563,7 @@ class _DetailDoctorState extends State<DetailDoctor> {
     }
   }
 
-  Widget _visit(int index) {
+ /* Widget _visit(int index) {
     if (edits[index]) {
       return Column(
         children: List.generate(AllData.doctorsInfo[index]['Day'].length, (i) {
@@ -409,9 +615,9 @@ class _DetailDoctorState extends State<DetailDoctor> {
       );
     } else {
       return Column(
-        children: List.generate(AllData.doctorsInfo[index]['Day'].length, (i) {
+        children: List.generate(AllData.doctors[index].visitDays!.length, (i) {
           return Text(
-            AllData.doctorsInfo[index]['Day'][i],
+            convertLetterTo3Letters(AllData.doctors[index].visitDays![i].day!),
             style: TextStyle(fontSize: 14, color: Colors.black),
           );
         }),
@@ -422,12 +628,12 @@ class _DetailDoctorState extends State<DetailDoctor> {
   Widget _time(int index) {
     if (edits[index]) {
       return Column(
-        children: List.generate(AllData.doctorsInfo[index]['Day'].length, (i) {
+        children: List.generate(AllData.doctors[index].timings!.length, (i) {
           return Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               DropdownMenuItem(
-                  child: Text(AllData.doctorsInfo[index]['Time'][i])),
+                  child: Text(AllData.doctors[index].timings![i].time!)),
               SizedBox(
                 width: 10.0.sp,
               ),
@@ -477,9 +683,9 @@ class _DetailDoctorState extends State<DetailDoctor> {
       );
     } else {
       return Column(
-        children: List.generate(AllData.doctorsInfo[index]['Day'].length, (i) {
+        children: List.generate(AllData.doctors[index].timings!.length, (i) {
           return Text(
-              DateFormat.jm().format(DateTime.parse('2021-01-01 ${AllData.doctorsInfo[index]['Time'][i]}')),
+              DateFormat.jm().format(DateTime.parse('2021-01-01 ${AllData.doctors[index].timings![i].time!}')),
             style: TextStyle(fontSize: 14, color: Colors.black),
           );
         }),
@@ -490,7 +696,7 @@ class _DetailDoctorState extends State<DetailDoctor> {
   Widget _slots(int index) {
     if (edits[index]) {
       return Column(
-        children: List.generate(AllData.doctorsInfo[index]['Day'].length, (i) {
+        children: List.generate(AllData.doctors[index].timings!.length, (i) {
           return Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -519,7 +725,7 @@ class _DetailDoctorState extends State<DetailDoctor> {
               ),
               DropdownMenuItem(
                   child: Text(
-                AllData.doctorsInfo[index]['Slots'][i].toString(),
+                    AllData.doctors[index].timings![i].visitCapacity!.toString(),
                 style: TextStyle(fontSize: 12.0.sp, color: Colors.black),
               )),
               SizedBox(
@@ -551,15 +757,15 @@ class _DetailDoctorState extends State<DetailDoctor> {
       );
     } else {
       return Column(
-        children: List.generate(AllData.doctorsInfo[index]['Day'].length, (i) {
+        children: List.generate(AllData.doctors[index].timings!.length, (i) {
           return Text(
-            AllData.doctorsInfo[index]['Slots'][i].toString(),
+            AllData.doctors[index].timings![i].time!.toString(),
             style: TextStyle(fontSize: 12.0.sp, color: Colors.black),
           );
         }),
       );
     }
-  }
+  }*/
 
   Future<void> _addDay(int index) async {
     return showDialog<void>(
@@ -687,6 +893,9 @@ class _DetailDoctorState extends State<DetailDoctor> {
                       } else {
                         d = '7';
                       }
+                      print(AllData.doctorsInfo[index]['Fees'][0]);
+                      print(AllData.doctorsInfo[index]['id']);
+                      print(AllData.clinicId);
                       var response = await http.post(url,
                           headers: {
                             'Accept': 'application/json',
@@ -695,7 +904,7 @@ class _DetailDoctorState extends State<DetailDoctor> {
                           body: jsonEncode({
                             'Clinic' : AllData.clinicId,
                             'Doctor' : AllData.doctorsInfo[index]['id'],
-                            'Fees' : 500,
+                            'Fees' : AllData.doctorsInfo[index]['Fees'][0],
                           }));
                       print(response.statusCode);
 

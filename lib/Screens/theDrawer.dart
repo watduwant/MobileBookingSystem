@@ -1,10 +1,12 @@
-import 'package:booking_system/Screens/details_page_doctors.dart';
-import 'package:booking_system/Screens/details_page_announcement.dart';
-import 'package:booking_system/Screens/details_page_appointment.dart';
-import 'package:booking_system/Screens/details_page_home.dart';
-import 'package:booking_system/Screens/details_page_support.dart';
+import 'package:booking_system/Local%20DB/localdb.dart';
+import 'package:booking_system/Screens/doctors.dart';
+import 'package:booking_system/Screens/announcement.dart';
+import 'package:booking_system/Screens/appointment.dart';
+import 'package:booking_system/Screens/home.dart';
+import 'package:booking_system/Screens/support.dart';
+import 'package:booking_system/Screens/labTest.dart';
 import 'package:flutter/material.dart';
-import 'home.dart';
+import 'login.dart';
 
 class TheDrawer extends StatefulWidget {
   final String userName;
@@ -73,6 +75,20 @@ class TheDrawerState extends State<TheDrawer>{
             ListTile(
               onTap: (){
                 Navigator.pop(context);
+                Navigator.push(context,MaterialPageRoute(builder: (context)=>LabTests(userName: widget.userName)));
+              },
+              title: Row(
+                  children: <Widget>[
+                    Icon(Icons.broken_image),
+                    SizedBox(width: 10,),
+                    Text('Lab Reports',style: TextStyle(fontFamily: 'Amaranth',fontWeight: FontWeight.w500,fontSize: 20),)
+                  ]
+              ),
+            ),
+            Divider(color: Colors.black26),
+            ListTile(
+              onTap: (){
+                Navigator.pop(context);
                 Navigator.push(context, MaterialPageRoute(builder: (context)=>DetailAnnouncement(userName: widget.userName)));
               },
               title: Row(
@@ -99,9 +115,10 @@ class TheDrawerState extends State<TheDrawer>{
             ),
             Divider(color: Colors.black26),
             ListTile(
-              onTap: (){
-                Navigator.pop(context);
-                Navigator.push(context,MaterialPageRoute(builder: (context)=>Home()));
+              onTap: () async {
+                //Navigator.pop(context);
+                //.push(context,MaterialPageRoute(builder: (context)=>Home()));
+                await LocalDb.logout(context);
               },
               title: Row(
                   children: <Widget>[

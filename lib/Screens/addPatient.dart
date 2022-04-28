@@ -7,6 +7,9 @@ import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 import 'package:sizer/sizer.dart';
 
+import '../Models/apppointmentServicesModel.dart';
+import '../Services/GetAppointments.dart';
+
 class AddPatient extends StatefulWidget {
   final String userName;
   AddPatient({required this.userName});
@@ -27,6 +30,9 @@ class _AddPatientState extends State<AddPatient> {
   var setDate = DateTime.now();
   bool loading = false;
 
+  List<GetAppointmentServicesModel>? setAppointment = [];
+  String chosenDate = '';
+
   String chosenDay =
       DateFormat('EEEE').format(DateTime.now()).toString().substring(0, 3);
 
@@ -40,7 +46,7 @@ class _AddPatientState extends State<AddPatient> {
 
   @override
   void initState() {
-    findDoctorNamesAndSlots();
+    fetchData();
     super.initState();
   }
 
@@ -64,7 +70,7 @@ class _AddPatientState extends State<AddPatient> {
             padding: EdgeInsets.all(0),
             child: ClipOval(
               child: IconButton(
-                icon: Icon(Icons.arrow_back_ios),
+                icon: Icon(Icons.arrow_back_ios, color: Colors.black,),
                 onPressed: () {
                   Navigator.pop(context);
                 },
@@ -101,7 +107,7 @@ class _AddPatientState extends State<AddPatient> {
                   context: context,
                   initialDate: setDate,
                   firstDate: DateTime.now(),
-                  lastDate: DateTime(2022),
+                  lastDate: DateTime.now().add(Duration(days: 21)),
                   builder: (BuildContext context, Widget? child) {
                     return Theme(
                       data: ThemeData.dark().copyWith(
@@ -126,6 +132,7 @@ class _AddPatientState extends State<AddPatient> {
                     .substring(0, 3);
 
                 setState(() {
+                  chosenDate = convert3LettersToLetter(chosenDay);
                   _slot = ["Choose Timing"];
                   _selectedDoctor = "Choose Doctor";
                   _selectedSlot = "Choose Timing";
@@ -360,8 +367,20 @@ class _AddPatientState extends State<AddPatient> {
       }
       detail['Appointments'] = x;
     }*/
+    int serviceId = 0;
+    for(var i in setAppointment!){
+      if(i.day == chosenDate){
+        if(i.doctor!.name == _selectedDoctor){
+          for(var j in i.timing!){
+            if(j.time ==  _timeIn12And24[_selectedSlot]){
+              serviceId = j.id!;
+            }
+          }
+        }
+      }
+    }
     await addAppointment(
-        nameController.text, int.parse(ageController.text), _selectedSex[0], phoneController.text, _selectedDoctor, _timeIn12And24[_selectedSlot]);
+        nameController.text, int.parse(ageController.text), _selectedSex[0], phoneController.text, _selectedDoctor, _timeIn12And24[_selectedSlot]!, dateController.text, serviceId);
 
     setState(() {
       loading = false;
@@ -376,7 +395,7 @@ class _AddPatientState extends State<AddPatient> {
     Navigator.of(context).pop();
   }
 
-  findDoctorNamesAndSlots() {
+  findDoctorNamesAndSlots() async {
     AllData.doctorDetails = {
       "Choose Doctor": ["Choose Timing"]
     };
@@ -384,6 +403,19 @@ class _AddPatientState extends State<AddPatient> {
     _selectedDoctor = "Choose Doctor";
     _selectedSlot = "Choose Timing";
     print(chosenDay);
+
+    for(var i in setAppointment!){
+      if(i.day == chosenDate){
+        var x = [];
+        for(var j in i.timing!){
+          x.add(j.time);
+        }
+        if(x.length != 0){
+          AllData.doctorDetails[i.doctor!.name!] = x;
+        }
+      }
+    }
+    /*
     for (int i = 0; i < AllData.doctorsInfo.length; i++) {
       var x = [];
       for (int j = 0; j < AllData.doctorsInfo[i]['Day'].length; j++) {
@@ -394,8 +426,55 @@ class _AddPatientState extends State<AddPatient> {
       if (x.length != 0) {
         AllData.doctorDetails[AllData.doctorsInfo[i]['Doctor']] = x;
       }
-    }
+    }*/
     print(AllData.doctorDetails);
     setState(() {});
   }
+
+  fetchData() async {
+    await AllAppointments.getAppointmentServices().then((value) {
+      if (value != null) {
+        setState(() {
+          setAppointment = value;
+        });
+      }
+    });
+  }
+
+  String convertLetterTo3Letters(String d) {
+    if (d == '1') {
+      return 'Mon';
+    } else if (d == '2') {
+      return 'Tue';
+    } else if (d == '3') {
+      return 'Wed';
+    } else if (d == '4') {
+      return 'Thu';
+    } else if (d == '5') {
+      return 'Fri';
+    } else if (d == '6') {
+      return 'Sat';
+    } else {
+      return 'Sun';
+    }
+  }
+
+  String convert3LettersToLetter(String d) {
+    if (d == 'Mon') {
+      return '1';
+    } else if (d == 'Tue') {
+      return '2';
+    } else if (d == 'Wed') {
+      return '3';
+    } else if (d == 'Thu') {
+      return '4';
+    } else if (d == 'Fri') {
+      return '5';
+    } else if (d == 'Sat') {
+      return '6';
+    } else {
+      return '7';
+    }
+  }
+
 }

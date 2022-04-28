@@ -4,7 +4,7 @@ import 'dataFetcher.dart';
 
 Future<dynamic> updateAppointments() async{
   print('Updating Appointments');
-  List<GetAllAppointments>? appointments = await AllAppointments.getAllAppointments();
+  /*List<GetAllAppointments>? appointments = await AllAppointments.getAllAppointments();
 
   print('Data Fetch over');
 
@@ -29,5 +29,5 @@ Future<dynamic> updateAppointments() async{
       }
     }
     detail['Appointments'] = x;
-  }
+  }*/
 }
